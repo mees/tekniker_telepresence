@@ -1,0 +1,17 @@
+<package>
+  <description brief="tekniker_telepresence">
+
+     tekniker_telepresence
+
+  </description>
+  <author>Oier Mees</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/tekniker_telepresence</url>
+  <depend package="std_msgs"/>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+
+</package>
+
+

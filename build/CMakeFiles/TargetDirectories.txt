@@ -1,0 +1,16 @@
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/ROSBUILD_genmsg_cpp.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/ROSBUILD_genmsg_lisp.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/ROSBUILD_gensrv_cpp.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/ROSBUILD_gensrv_lisp.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/clean-test-results.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/listener.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/rosbuild_precompile.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/rosbuild_premsgsrvgen.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/rospack_genmsg.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/rospack_genmsg_libexe.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/rospack_gensrv.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/test.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/test-future.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/test-results.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/test-results-run.dir
+/home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/tests.dir
