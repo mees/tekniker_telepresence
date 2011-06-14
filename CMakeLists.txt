@@ -20,6 +20,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+find_package(wxWidgets REQUIRED)
+include(${wxWidgets_USE_FILE})
+include_directories( ${wxWidgets_INCLUDE_DIRS} )
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
