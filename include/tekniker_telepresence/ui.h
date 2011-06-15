@@ -8,6 +8,10 @@
 #ifndef __ui__
 #define __ui__
 
+#include <ros/ros.h>
+#include "std_msgs/String.h"
+#include "sensor_msgs/Image.h"
+
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -21,6 +25,7 @@
 #include <wx/button.h>
 #include <wx/stattext.h>
 #include <wx/frame.h>
+#include <wx/timer.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +36,10 @@
 class telepresenceFrame : public wxFrame 
 {
 	private:
+		ros::NodeHandle nh_;
+		ros::Subscriber image_color;
+		wxTimer* update_timer_;
+
 	
 	protected:
 		wxStaticBitmap* m_bitmap2;
@@ -39,6 +48,9 @@ class telepresenceFrame : public wxFrame
 		wxButton* m_button61;
 		wxButton* m_button58;
 		wxStaticText* m_staticText2;
+
+		void onUpdate(wxTimerEvent& evt);
+		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKey( wxCommandEvent& event );

@@ -36,10 +36,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/amilab/telepresence/tekniker_telepresence
+CMAKE_SOURCE_DIR = /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/amilab/telepresence/tekniker_telepresence/build
+CMAKE_BINARY_DIR = /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -66,9 +66,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles /home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -161,17 +161,17 @@ clean-test-results/fast:
 .PHONY : clean-test-results/fast
 
 #=============================================================================
-# Target rules for targets named listener
+# Target rules for targets named kinecta
 
 # Build rule for target.
-listener: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 listener
-.PHONY : listener
+kinecta: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 kinecta
+.PHONY : kinecta
 
 # fast build rule for target.
-listener/fast:
-	$(MAKE) -f CMakeFiles/listener.dir/build.make CMakeFiles/listener.dir/build
-.PHONY : listener/fast
+kinecta/fast:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/build
+.PHONY : kinecta/fast
 
 #=============================================================================
 # Target rules for targets named rosbuild_precompile
@@ -304,19 +304,34 @@ tests/fast:
 .PHONY : tests/fast
 
 # target to build an object file
-src/listener.o:
-	$(MAKE) -f CMakeFiles/listener.dir/build.make CMakeFiles/listener.dir/src/listener.o
-.PHONY : src/listener.o
+src/Main.o:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/Main.o
+.PHONY : src/Main.o
 
 # target to preprocess a source file
-src/listener.i:
-	$(MAKE) -f CMakeFiles/listener.dir/build.make CMakeFiles/listener.dir/src/listener.i
-.PHONY : src/listener.i
+src/Main.i:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/Main.i
+.PHONY : src/Main.i
 
 # target to generate assembly for a file
-src/listener.s:
-	$(MAKE) -f CMakeFiles/listener.dir/build.make CMakeFiles/listener.dir/src/listener.s
-.PHONY : src/listener.s
+src/Main.s:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/Main.s
+.PHONY : src/Main.s
+
+# target to build an object file
+src/ui.o:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/ui.o
+.PHONY : src/ui.o
+
+# target to preprocess a source file
+src/ui.i:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/ui.i
+.PHONY : src/ui.i
+
+# target to generate assembly for a file
+src/ui.s:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/ui.s
+.PHONY : src/ui.s
 
 # Help Target
 help:
@@ -330,7 +345,7 @@ help:
 	@echo "... ROSBUILD_gensrv_lisp"
 	@echo "... clean-test-results"
 	@echo "... edit_cache"
-	@echo "... listener"
+	@echo "... kinecta"
 	@echo "... rebuild_cache"
 	@echo "... rosbuild_precompile"
 	@echo "... rosbuild_premsgsrvgen"
@@ -342,9 +357,12 @@ help:
 	@echo "... test-results"
 	@echo "... test-results-run"
 	@echo "... tests"
-	@echo "... src/listener.o"
-	@echo "... src/listener.i"
-	@echo "... src/listener.s"
+	@echo "... src/Main.o"
+	@echo "... src/Main.i"
+	@echo "... src/Main.s"
+	@echo "... src/ui.o"
+	@echo "... src/ui.i"
+	@echo "... src/ui.s"
 .PHONY : help
 
 

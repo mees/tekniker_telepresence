@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/amilab/telepresence/tekniker_telepresence
+CMAKE_SOURCE_DIR = /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/amilab/telepresence/tekniker_telepresence/build
+CMAKE_BINARY_DIR = /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build
 
 # Utility rule file for test-future.
 
@@ -54,6 +54,6 @@ CMakeFiles/test-future.dir/clean:
 .PHONY : CMakeFiles/test-future.dir/clean
 
 CMakeFiles/test-future.dir/depend:
-	cd /home/amilab/telepresence/tekniker_telepresence/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/amilab/telepresence/tekniker_telepresence /home/amilab/telepresence/tekniker_telepresence /home/amilab/telepresence/tekniker_telepresence/build /home/amilab/telepresence/tekniker_telepresence/build /home/amilab/telepresence/tekniker_telepresence/build/CMakeFiles/test-future.dir/DependInfo.cmake --color=$(COLOR)
+	cd /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles/test-future.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/test-future.dir/depend
 
