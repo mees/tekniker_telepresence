@@ -319,6 +319,21 @@ src/Main.s:
 .PHONY : src/Main.s
 
 # target to build an object file
+src/camview.o:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/camview.o
+.PHONY : src/camview.o
+
+# target to preprocess a source file
+src/camview.i:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/camview.i
+.PHONY : src/camview.i
+
+# target to generate assembly for a file
+src/camview.s:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/camview.s
+.PHONY : src/camview.s
+
+# target to build an object file
 src/ui.o:
 	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/ui.o
 .PHONY : src/ui.o
@@ -360,6 +375,9 @@ help:
 	@echo "... src/Main.o"
 	@echo "... src/Main.i"
 	@echo "... src/Main.s"
+	@echo "... src/camview.o"
+	@echo "... src/camview.i"
+	@echo "... src/camview.s"
 	@echo "... src/ui.o"
 	@echo "... src/ui.i"
 	@echo "... src/ui.s"

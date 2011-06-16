@@ -11,6 +11,13 @@
 #include <ros/ros.h>
 #include "std_msgs/String.h"
 #include "sensor_msgs/Image.h"
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <std_msgs/Int32.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include "tekniker_telepresence/camview.h"
 
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -33,24 +40,38 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class telepresenceFrame
 ///////////////////////////////////////////////////////////////////////////////
-class telepresenceFrame : public wxFrame 
+class CCamView;
+class telepresenceFrame : public wxFrame
 {
 	private:
 		ros::NodeHandle nh_;
-		ros::Subscriber image_color;
+		image_transport::Subscriber image_color;
+		ros::Subscriber coordX_sub_;
+		ros::Subscriber coordY_sub_;
+		image_transport::Publisher image_pub_;
+		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
+		IplImage _IplImg;
+		
 
 	
 	protected:
-		wxStaticBitmap* m_bitmap2;
+		wxBitmap m_bitmap2;
 		wxButton* m_button56;
 		wxButton* m_button57;
 		wxButton* m_button61;
 		wxButton* m_button58;
 		wxStaticText* m_staticText2;
+		int m_nWidth;
+		int m_nHeight;
+		wxPanel*	m_pMainPanel;
+		CCamView*	m_pCameraView;
+
 
 		void onUpdate(wxTimerEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
+		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
+		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKey( wxCommandEvent& event );
@@ -63,6 +84,7 @@ class telepresenceFrame : public wxFrame
 		
 		telepresenceFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("ui"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~telepresenceFrame();
+		
 	
 };
 

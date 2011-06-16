@@ -11,6 +11,10 @@ SET(CMAKE_FORCE_UNIX_PATHS 1)
 # The C and CXX include file search paths:
 SET(CMAKE_C_INCLUDE_PATH
   "../include"
+  "/opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include"
+  "/opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include"
+  "/opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv"
+  "/opt/ros/diamondback/stacks/image_common/image_transport/include"
   "/opt/ros/diamondback/stacks/common_msgs/sensor_msgs/include"
   "/opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include"
   "/opt/ros/diamondback/stacks/common_msgs/sensor_msgs/srv_gen/cpp/include"
@@ -18,6 +22,10 @@ SET(CMAKE_C_INCLUDE_PATH
   "/opt/ros/diamondback/stacks/ros_comm/tools/rosbag/include"
   "/opt/ros/diamondback/stacks/ros_comm/tools/topic_tools/include"
   "/opt/ros/diamondback/stacks/ros_comm/tools/topic_tools/srv_gen/cpp/include"
+  "/opt/ros/diamondback/stacks/common/pluginlib/include"
+  "/opt/ros/diamondback/stacks/common/pluginlib"
+  "/opt/ros/diamondback/stacks/common/tinyxml/include"
+  "/opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/include"
   "/opt/ros/diamondback/stacks/ros_comm/tools/rostest/include"
   "/opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include"
   "/opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include"

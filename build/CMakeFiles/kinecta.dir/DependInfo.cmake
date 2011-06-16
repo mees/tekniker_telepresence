@@ -5,6 +5,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
   "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp" "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles/kinecta.dir/src/Main.o"
+  "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp" "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles/kinecta.dir/src/camview.o"
   "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp" "/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles/kinecta.dir/src/ui.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
