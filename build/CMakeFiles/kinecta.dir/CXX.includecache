@@ -39,6 +39,8 @@ opencv2/highgui/highgui.hpp
 -
 tekniker_telepresence/camview.h
 ../include/tekniker_telepresence/tekniker_telepresence/camview.h
+tekniker_telepresence/worker.h
+../include/tekniker_telepresence/tekniker_telepresence/worker.h
 wx/bitmap.h
 -
 wx/image.h
@@ -67,6 +69,16 @@ wx/frame.h
 -
 wx/timer.h
 -
+
+../include/tekniker_telepresence/worker.h
+wx/wxprec.h
+../include/tekniker_telepresence/wx/wxprec.h
+wx/thread.h
+../include/tekniker_telepresence/wx/thread.h
+tekniker_telepresence/camview.h
+../include/tekniker_telepresence/tekniker_telepresence/camview.h
+wx/wx.h
+../include/tekniker_telepresence/wx/wx.h
 
 /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/include/sensor_msgs/image_encodings.h
 string
@@ -794,25 +806,15 @@ vector
 time.h
 -
 
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp
-math.h
--
-stdio.h
--
-highgui.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/highgui.h
-cv.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/cv.h
-cvaux.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/cvaux.h
-wx/wxprec.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/wx/wxprec.h
-wx/image.h
--
+/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp
 wx/wx.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/wx/wx.h
-tekniker_telepresence/camview.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/tekniker_telepresence/camview.h
+-
+wx/app.h
+-
+tekniker_telepresence/ui.h
+/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/tekniker_telepresence/ui.h
+ros/ros.h
+-
 
 /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp
 tekniker_telepresence/ui.h

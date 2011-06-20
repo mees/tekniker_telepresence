@@ -45,8 +45,7 @@ END_EVENT_TABLE()
 // Input:	nothing
 // Output:	nothing
 ////////////////////////////////////////////////////////////////////
-CCamView::CCamView( wxWindow *frame, const wxPoint& pos, const wxSize& size ):
-			wxWindow(frame, -1, pos, size, wxSIMPLE_BORDER )
+CCamView::CCamView( wxWindow *frame, const wxPoint& pos, const wxSize& size ): wxWindow(frame, -1, pos, size, wxSIMPLE_BORDER )
 {
 	
 
@@ -140,12 +139,6 @@ void CCamView::DrawCam( IplImage* pImg )
 		int nCamWidth = pImg->width;
 		int nCamHeight =pImg->height;
 		//printf("drawcam m_nWidth:%d m_nHeight:%d\n",m_nWidth, m_nHeight);
-
-		// draw a rectangle
-		//cvRectangle( pDstImg,
-					//cvPoint( 10, 10 ),
-					//cvPoint( nCamWidth-10, nCamHeight-10 ),
-					//CV_RGB( 0,255,0 ), 1 );
 
 
 		// process image from opencv to wxwidgets

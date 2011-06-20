@@ -18,6 +18,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "tekniker_telepresence/camview.h"
+#include "tekniker_telepresence/worker.h"
+
 
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -33,6 +35,7 @@
 #include <wx/stattext.h>
 #include <wx/frame.h>
 #include <wx/timer.h>
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +60,7 @@ class telepresenceFrame : public wxFrame
 	
 	protected:
 		wxBitmap m_bitmap2;
+		wxBitmap m_bitmap;
 		wxButton* m_button56;
 		wxButton* m_button57;
 		wxButton* m_button61;
@@ -66,6 +70,8 @@ class telepresenceFrame : public wxFrame
 		int m_nHeight;
 		wxPanel*	m_pMainPanel;
 		CCamView*	m_pCameraView;
+		CCamView*	m_pCameraView2;
+		CwxopencvWorker*	m_pWxopencvWorker;
 
 
 		void onUpdate(wxTimerEvent& evt);

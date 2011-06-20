@@ -14,47 +14,117 @@ int RGBcoordX, RGBcoordY;
 
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 800,600 ), wxDefaultSize );
+	//ShowFullScreen(true);
+	this->SetSizeHints( wxSize( 1500,800 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
-	bSizer1->SetMinSize( wxSize( 800,600 ) ); 
+	//bSizer1->SetMinSize( wxSize( 900,700 ) ); 
 	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	
+
+
 	
 	
-	
+	/*m_pCamera = new CCamera(); 
+
+	// create widows frame
+	CGUIFrame* m_pFrame = new CGUIFrame( NULL, wxT("wxOpenCv Demo"),
+		                 wxPoint(-1, -1), wxSize(640, 600) );
+
+	// Show the frame
+	m_pFrame->Show(TRUE);
+	//SetTopWindow(m_pFrame);
+
+	// set parent
+	m_pFrame->m_pWxopencv = this;
+
+	// build worker thread to process video stream
+	m_pWxopencvWorker = new CwxopencvWorker( m_pFrame );
+	// create thread or fail on exit
+	if ( m_pWxopencvWorker->Create() != wxTHREAD_NO_ERROR )
+	{
+		wxExit( );
+	}
+
+	// exchange data if gui defined
+	CCamView *pCamView = m_pFrame->GetCameraView();
+
+	// link robot to GUI
+	m_pFrame->m_pWorker = m_pWxopencvWorker;
+	m_pWxopencvWorker->m_pCamera = m_pCamera;
+	m_pCamera->m_pWorker = m_pWxopencvWorker;
+
+	// initialize camera 
+    if( m_pCamera->Init(  ) == 0 )
+    {		
+        wxMessageBox( wxT("Can't initialize camera. Try to change format"),
+					wxT("Error") );
+    }
+
+	m_pCamera->m_pCameraView = pCamView;
+	m_pCamera->m_pFrame = m_pFrame;
+
+	// Link camera view to camera object
+	pCamView->m_pCamera = m_pCamera;
+
+	// start the thread
+	if ( m_pWxopencvWorker->Run() != wxTHREAD_NO_ERROR )
+	{
+		wxExit( );
+	} */
+/////////////////////////7*
 	/////////////////////////////////////////////////////
 	int width, height;
 	this->GetClientSize(&width, &height);
+	//printf("width:%d,height:%d\n",width,height);
 		m_pMainPanel = new wxPanel(this, -1, wxPoint(0,0), wxSize(width,height), 0 );
 	// build static/logical boxes
 
 	// build static/logical boxes
-	wxStaticBox *pCameraBox = new wxStaticBox( m_pMainPanel, -1, wxT("camera"), wxPoint(2,0), wxSize(400,300) );
+	//wxStaticBox *pCameraBox = new wxStaticBox( m_pMainPanel, -1, wxT("camera"), wxPoint(2,0), wxSize(400,300) );
 
 	// get my main static sizer by the box
-	wxStaticBoxSizer *pMainSizer = new wxStaticBoxSizer( pCameraBox, wxHORIZONTAL );
+	//wxStaticBoxSizer *pMainSizer = new wxStaticBoxSizer( pCameraBox, wxHORIZONTAL );
 	
 	// build cam canvas
 	m_pCameraView = new CCamView( m_pMainPanel, wxPoint(5,15), wxSize(640, 480) );
-	pMainSizer->Add( m_pCameraView, 1, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL|wxEXPAND );
+	//pMainSizer->Add( m_pCameraView, 1, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL|wxEXPAND );
 
-	m_pMainPanel->SetSizer( pMainSizer );
-	pMainSizer->SetSizeHints( m_pMainPanel );	
-	m_pMainPanel->SetAutoLayout( TRUE );
+	//m_pMainPanel->SetSizer( pMainSizer );
+	//pMainSizer->SetSizeHints( m_pMainPanel );	
+	//m_pMainPanel->SetAutoLayout( TRUE );
 
 
-	wxBoxSizer *pTopSizer = new wxBoxSizer(wxVERTICAL);
-	pTopSizer->Add( m_pMainPanel, 1, wxALIGN_CENTER|wxEXPAND, 0 );
-	SetSizer( pTopSizer );
-	
+	//wxBoxSizer *pTopSizer = new wxBoxSizer(wxVERTICAL);
+	//pTopSizer->Add( m_pMainPanel, 1, wxALIGN_CENTER|wxEXPAND, 0 );
+	//SetSizer( pTopSizer );
+	//m_pMainPanel = new wxPanel(this, -1, wxPoint(0,0), wxSize(width,height), 0 );
+	m_pCameraView2 = new CCamView( m_pMainPanel, wxPoint(5,15), wxSize(400, 300) );
 	// display my stuff
 	SetAutoLayout( TRUE );
 	/////////////////////////////////////////////////////
 	bSizer4->Add( m_pCameraView, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_pCameraView2, 1, wxALL|wxEXPAND, 5 );
 	
+	//wxBoxSizer* bSizer100;
+	//bSizer100=new wxBoxSizer(wxHORIZONTAL);
+	//bsizer1->Add(bSizer100,
+		m_pWxopencvWorker = new CwxopencvWorker( m_pCameraView2 );
+	// create thread or fail on exit
+	if ( m_pWxopencvWorker->Create() != wxTHREAD_NO_ERROR )
+	{
+		printf("error in threadCreate\n");
+		wxExit( );
+	}
+		// start the thread
+	if ( m_pWxopencvWorker->Run() != wxTHREAD_NO_ERROR )
+	{
+		printf("error in threadRun\n");
+		wxExit( );
+	} 
 	bSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer28;
@@ -121,7 +191,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 	it_=new image_transport::ImageTransport(nh_);
 	image_pub_ = it_->advertise("out", 1);
-	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
+	//image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	coordX_sub_ = nh_.subscribe("/kinect/RGBcoordX", 1, &telepresenceFrame::coordX_callback, this);
 	coordY_sub_ = nh_.subscribe("/kinect/RGBcoordY", 1, &telepresenceFrame::coordY_callback, this);
 	//cv::namedWindow(WINDOW);
@@ -213,7 +283,6 @@ uint8[] data*/
 			}
 	
 	//cv::imshow(WINDOW, cv_ptr->image);
-	cv::waitKey(3);
 	image_pub_.publish(cv_ptr->toImageMsg());
 	//printf("imagecolorcallback: width:%d height:%d\n",cv_ptr->image.cols, cv_ptr->image.rows);
 	_IplImg=cv_ptr->image;

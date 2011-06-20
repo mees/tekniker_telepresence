@@ -348,6 +348,21 @@ src/ui.s:
 	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/ui.s
 .PHONY : src/ui.s
 
+# target to build an object file
+src/worker.o:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/worker.o
+.PHONY : src/worker.o
+
+# target to preprocess a source file
+src/worker.i:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/worker.i
+.PHONY : src/worker.i
+
+# target to generate assembly for a file
+src/worker.s:
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/worker.s
+.PHONY : src/worker.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -381,6 +396,9 @@ help:
 	@echo "... src/ui.o"
 	@echo "... src/ui.i"
 	@echo "... src/ui.s"
+	@echo "... src/worker.o"
+	@echo "... src/worker.i"
+	@echo "... src/worker.s"
 .PHONY : help
 
 

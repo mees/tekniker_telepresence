@@ -241,11 +241,77 @@ CMakeFiles/kinecta.dir/src/camview.o.provides: CMakeFiles/kinecta.dir/src/camvie
 CMakeFiles/kinecta.dir/src/camview.o.provides.build: CMakeFiles/kinecta.dir/src/camview.o
 .PHONY : CMakeFiles/kinecta.dir/src/camview.o.provides.build
 
+CMakeFiles/kinecta.dir/src/worker.o: CMakeFiles/kinecta.dir/flags.make
+CMakeFiles/kinecta.dir/src/worker.o: ../src/worker.cpp
+CMakeFiles/kinecta.dir/src/worker.o: ../manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/tools/rospack/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/core/roslib/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/messages/std_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/core/rosbuild/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/core/roslang/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/rospy/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/utilities/cpp_common/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/utilities/rostime/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp_serialization/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/utilities/xmlrpcpp/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosconsole/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/tools/rosclean/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosgraph/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosmaster/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosout/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/roslaunch/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/ros/tools/rosunit/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rostest/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/topic_tools/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosbag/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosbagmigration/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common/tinyxml/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common/pluginlib/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/image_common/image_transport/manifest.xml
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/messages/std_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/ros_comm/tools/topic_tools/srv_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/worker.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/srv_gen/generated
+	$(CMAKE_COMMAND) -E cmake_progress_report /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/kinecta.dir/src/worker.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/worker.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/worker.cpp
+
+CMakeFiles/kinecta.dir/src/worker.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinecta.dir/src/worker.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/worker.cpp > CMakeFiles/kinecta.dir/src/worker.i
+
+CMakeFiles/kinecta.dir/src/worker.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinecta.dir/src/worker.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/worker.cpp -o CMakeFiles/kinecta.dir/src/worker.s
+
+CMakeFiles/kinecta.dir/src/worker.o.requires:
+.PHONY : CMakeFiles/kinecta.dir/src/worker.o.requires
+
+CMakeFiles/kinecta.dir/src/worker.o.provides: CMakeFiles/kinecta.dir/src/worker.o.requires
+	$(MAKE) -f CMakeFiles/kinecta.dir/build.make CMakeFiles/kinecta.dir/src/worker.o.provides.build
+.PHONY : CMakeFiles/kinecta.dir/src/worker.o.provides
+
+CMakeFiles/kinecta.dir/src/worker.o.provides.build: CMakeFiles/kinecta.dir/src/worker.o
+.PHONY : CMakeFiles/kinecta.dir/src/worker.o.provides.build
+
 # Object files for target kinecta
 kinecta_OBJECTS = \
 "CMakeFiles/kinecta.dir/src/Main.o" \
 "CMakeFiles/kinecta.dir/src/ui.o" \
-"CMakeFiles/kinecta.dir/src/camview.o"
+"CMakeFiles/kinecta.dir/src/camview.o" \
+"CMakeFiles/kinecta.dir/src/worker.o"
 
 # External object files for target kinecta
 kinecta_EXTERNAL_OBJECTS =
@@ -253,6 +319,7 @@ kinecta_EXTERNAL_OBJECTS =
 ../bin/kinecta: CMakeFiles/kinecta.dir/src/Main.o
 ../bin/kinecta: CMakeFiles/kinecta.dir/src/ui.o
 ../bin/kinecta: CMakeFiles/kinecta.dir/src/camview.o
+../bin/kinecta: CMakeFiles/kinecta.dir/src/worker.o
 ../bin/kinecta: CMakeFiles/kinecta.dir/build.make
 ../bin/kinecta: CMakeFiles/kinecta.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ../bin/kinecta"
@@ -265,6 +332,7 @@ CMakeFiles/kinecta.dir/build: ../bin/kinecta
 CMakeFiles/kinecta.dir/requires: CMakeFiles/kinecta.dir/src/Main.o.requires
 CMakeFiles/kinecta.dir/requires: CMakeFiles/kinecta.dir/src/ui.o.requires
 CMakeFiles/kinecta.dir/requires: CMakeFiles/kinecta.dir/src/camview.o.requires
+CMakeFiles/kinecta.dir/requires: CMakeFiles/kinecta.dir/src/worker.o.requires
 .PHONY : CMakeFiles/kinecta.dir/requires
 
 CMakeFiles/kinecta.dir/clean:

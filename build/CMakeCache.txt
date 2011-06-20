@@ -183,7 +183,7 @@ TOOLCHAINCONFIG:FILEPATH=TOOLCHAINCONFIG-NOTFOUND
 USERCONFIG:FILEPATH=USERCONFIG-NOTFOUND
 
 //Path to a file.
-_file_name:FILEPATH=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp
+_file_name:FILEPATH=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/worker.cpp
 
 //Value Computed by CMake
 tekniker_telepresence_BINARY_DIR:STATIC=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build
