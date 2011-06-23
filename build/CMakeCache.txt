@@ -183,7 +183,7 @@ TOOLCHAINCONFIG:FILEPATH=TOOLCHAINCONFIG-NOTFOUND
 USERCONFIG:FILEPATH=USERCONFIG-NOTFOUND
 
 //Path to a file.
-_file_name:FILEPATH=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/worker.cpp
+_file_name:FILEPATH=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp
 
 //Value Computed by CMake
 tekniker_telepresence_BINARY_DIR:STATIC=/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build
@@ -195,7 +195,7 @@ tekniker_telepresence_SOURCE_DIR:STATIC=/opt/ros/diamondback/stacks/tekniker-ros
 wxWidgets_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/wx-config
 
 //Path to a program.
-wxWidgets_wxrc_EXECUTABLE:FILEPATH=wxWidgets_wxrc_EXECUTABLE-NOTFOUND
+wxWidgets_wxrc_EXECUTABLE:FILEPATH=/usr/bin/wxrc
 
 
 ########################

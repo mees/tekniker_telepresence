@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010, Oier Mees and Technological Center Tekniker
+ * Copyright (C) 2011, Oier Mees and Technological Center Tekniker
  */
 #include "tekniker_telepresence/ui.h"
 #include <cstdlib>
@@ -7,11 +7,16 @@
 
 namespace enc = sensor_msgs::image_encodings;
 
-static const char WINDOW[] = "Image window";
 
 int RGBcoordX, RGBcoordY;
 
-
+DECLARE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE, -1)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
+BEGIN_EVENT_TABLE(telepresenceFrame, wxFrame)
+	EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, telepresenceFrame::OnThreadUpdate)
+	EVT_CLOSE(telepresenceFrame::OnClose)
+END_EVENT_TABLE()
+        
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
@@ -25,106 +30,29 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 
-
-	
-	
-	/*m_pCamera = new CCamera(); 
-
-	// create widows frame
-	CGUIFrame* m_pFrame = new CGUIFrame( NULL, wxT("wxOpenCv Demo"),
-		                 wxPoint(-1, -1), wxSize(640, 600) );
-
-	// Show the frame
-	m_pFrame->Show(TRUE);
-	//SetTopWindow(m_pFrame);
-
-	// set parent
-	m_pFrame->m_pWxopencv = this;
-
-	// build worker thread to process video stream
-	m_pWxopencvWorker = new CwxopencvWorker( m_pFrame );
-	// create thread or fail on exit
-	if ( m_pWxopencvWorker->Create() != wxTHREAD_NO_ERROR )
-	{
-		wxExit( );
-	}
-
-	// exchange data if gui defined
-	CCamView *pCamView = m_pFrame->GetCameraView();
-
-	// link robot to GUI
-	m_pFrame->m_pWorker = m_pWxopencvWorker;
-	m_pWxopencvWorker->m_pCamera = m_pCamera;
-	m_pCamera->m_pWorker = m_pWxopencvWorker;
-
-	// initialize camera 
-    if( m_pCamera->Init(  ) == 0 )
-    {		
-        wxMessageBox( wxT("Can't initialize camera. Try to change format"),
-					wxT("Error") );
-    }
-
-	m_pCamera->m_pCameraView = pCamView;
-	m_pCamera->m_pFrame = m_pFrame;
-
-	// Link camera view to camera object
-	pCamView->m_pCamera = m_pCamera;
-
-	// start the thread
-	if ( m_pWxopencvWorker->Run() != wxTHREAD_NO_ERROR )
-	{
-		wxExit( );
-	} */
-/////////////////////////7*
-	/////////////////////////////////////////////////////
 	int width, height;
 	this->GetClientSize(&width, &height);
 	//printf("width:%d,height:%d\n",width,height);
-		m_pMainPanel = new wxPanel(this, -1, wxPoint(0,0), wxSize(width,height), 0 );
-	// build static/logical boxes
 
-	// build static/logical boxes
-	//wxStaticBox *pCameraBox = new wxStaticBox( m_pMainPanel, -1, wxT("camera"), wxPoint(2,0), wxSize(400,300) );
-
-	// get my main static sizer by the box
-	//wxStaticBoxSizer *pMainSizer = new wxStaticBoxSizer( pCameraBox, wxHORIZONTAL );
+	m_pCameraView = new CCamView(this, wxPoint(5,15), wxSize(640, 480) );
 	
-	// build cam canvas
-	m_pCameraView = new CCamView( m_pMainPanel, wxPoint(5,15), wxSize(640, 480) );
-	//pMainSizer->Add( m_pCameraView, 1, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL|wxEXPAND );
-
-	//m_pMainPanel->SetSizer( pMainSizer );
-	//pMainSizer->SetSizeHints( m_pMainPanel );	
-	//m_pMainPanel->SetAutoLayout( TRUE );
-
-
-	//wxBoxSizer *pTopSizer = new wxBoxSizer(wxVERTICAL);
-	//pTopSizer->Add( m_pMainPanel, 1, wxALIGN_CENTER|wxEXPAND, 0 );
-	//SetSizer( pTopSizer );
-	//m_pMainPanel = new wxPanel(this, -1, wxPoint(0,0), wxSize(width,height), 0 );
-	m_pCameraView2 = new CCamView( m_pMainPanel, wxPoint(5,15), wxSize(400, 300) );
+	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(640, 480) );
 	// display my stuff
 	SetAutoLayout( TRUE );
 	/////////////////////////////////////////////////////
-	bSizer4->Add( m_pCameraView, 1, wxALL|wxEXPAND, 5 );
-	bSizer4->Add( m_pCameraView2, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0 );
+	bSizer4->Add( m_pCameraView2, 0, wxALIGN_CENTER_HORIZONTAL, 0 );
 	
-	//wxBoxSizer* bSizer100;
-	//bSizer100=new wxBoxSizer(wxHORIZONTAL);
-	//bsizer1->Add(bSizer100,
-		m_pWxopencvWorker = new CwxopencvWorker( m_pCameraView2 );
-	// create thread or fail on exit
-	if ( m_pWxopencvWorker->Create() != wxTHREAD_NO_ERROR )
+	if (wxThreadHelper::Create(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR)
 	{
-		printf("error in threadCreate\n");
-		wxExit( );
+		wxLogError(wxT("Could not create the worker thread!"));
+		return;
 	}
-		// start the thread
-	if ( m_pWxopencvWorker->Run() != wxTHREAD_NO_ERROR )
+	if (GetThread()->Run() != wxTHREAD_NO_ERROR)
 	{
-		printf("error in threadRun\n");
-		wxExit( );
-	} 
+		wxLogError(wxT("Could not run the worker thread!"));
+		return;
+	}
 	bSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer28;
@@ -191,7 +119,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 	it_=new image_transport::ImageTransport(nh_);
 	image_pub_ = it_->advertise("out", 1);
-	//image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
+	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	coordX_sub_ = nh_.subscribe("/kinect/RGBcoordX", 1, &telepresenceFrame::coordX_callback, this);
 	coordY_sub_ = nh_.subscribe("/kinect/RGBcoordY", 1, &telepresenceFrame::coordY_callback, this);
 	//cv::namedWindow(WINDOW);
@@ -247,6 +175,31 @@ void telepresenceFrame::onUpdate(wxTimerEvent& evt)
   {
     Close();
   }
+} 
+void telepresenceFrame::OnClose(wxCloseEvent&)
+{
+            // important: before terminating, we _must_ wait for our joinable
+            // thread to end, if it's running; in fact it uses variables of this
+            // instance and posts events to *this event handler
+
+if (GetThread() && GetThread()->IsRunning()) // DoStartALongTask() may have not been called 
+	GetThread()->Wait();
+
+Destroy();
+}
+
+void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
+{
+	//printf("onThreadUpdate\n");
+	//evt.GetInt()
+	//{
+	//wxCriticalSectionLocker lock(mutex);
+	//if(_IplImg2)
+	//{
+		//printf("thread update, _IplImg2.imagesize:%d  _IplImg2widthStep:%d\n",_IplImg2->imageSize,_IplImg2->widthStep);
+	//}
+	m_pCameraView2->DrawCam(_IplImg2);
+	//}
 }
 	
 void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& msg)
@@ -272,15 +225,15 @@ uint8[] data*/
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-	if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-			{
-				if (RGBcoordX >= 0 && RGBcoordY >= 0)
-					{
-				cv::circle(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY), 50, CV_RGB(255,0,0), 3, 8, 0);
-				cv::line(cv_ptr->image, cv::Point(RGBcoordX - 70, RGBcoordY), cv::Point(RGBcoordX + 70, RGBcoordY), CV_RGB(255,0,0), 3, 8, 0);					
-				cv::line(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY - 70), cv::Point(RGBcoordX, RGBcoordY + 70), CV_RGB(255,0,0), 3, 8, 0);	
-					}
-			}
+	//if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
+			//{
+				//if (RGBcoordX >= 0 && RGBcoordY >= 0)
+					//{
+				//cv::circle(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY), 50, CV_RGB(255,0,0), 3, 8, 0);
+				//cv::line(cv_ptr->image, cv::Point(RGBcoordX - 70, RGBcoordY), cv::Point(RGBcoordX + 70, RGBcoordY), CV_RGB(255,0,0), 3, 8, 0);					
+				//cv::line(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY - 70), cv::Point(RGBcoordX, RGBcoordY + 70), CV_RGB(255,0,0), 3, 8, 0);	
+					//}
+			//}
 	
 	//cv::imshow(WINDOW, cv_ptr->image);
 	image_pub_.publish(cv_ptr->toImageMsg());
@@ -291,6 +244,44 @@ uint8[] data*/
 	
   //ROS_INFO("I heard: [%d]", msg->data[0]);
 }
+ wxThread::ExitCode telepresenceFrame::Entry()
+        {
+            CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
+            cvSetCaptureProperty(capture,CV_CAP_PROP_CONVERT_RGB, false);
+			if ( !capture ) 
+			{
+				fprintf( stderr, "ERROR: capture is NULL \n" );
+				getchar();
+			}
+            while (!GetThread()->TestDestroy())
+            {
+                // since this Entry() is implemented in MyFrame context we don't
+                // need any pointer to access the m_data, m_processedData, m_dataCS
+                // variables... very nice!
+
+				//{
+				//wxCriticalSectionLocker lock(mutex);
+				IplImage *aux=cvQueryFrame( capture );
+				_IplImg2=aux;
+				cvConvertImage(aux,_IplImg2,CV_CVTIMG_SWAP_RB);
+				//_IplImg2 = cvQueryFrame( capture );
+				//}
+				wxCommandEvent evt(wxEVT_COMMAND_MYTHREAD_UPDATE, wxID_ANY);
+	            this->AddPendingEvent(evt);
+			}
+			cvReleaseCapture( &capture );
+
+                //// VERY IMPORTANT: do not call any GUI function inside this
+                ////                 function; rather use wxQueueEvent():
+                //wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+                    //// we used pointer 'this' assuming it's safe; see OnClose()
+
+
+            // TestDestroy() returned true (which means the main thread asked us
+            // to terminate as soon as possible) or we ended the long task...
+            return (wxThread::ExitCode)0;
+        }
+
 
 telepresenceFrame::~telepresenceFrame()
 {
@@ -301,6 +292,7 @@ telepresenceFrame::~telepresenceFrame()
 	m_button58->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvDownKey ), NULL, this );
 	delete update_timer_;
 	delete m_pCameraView;
+	delete m_pCameraView2;
 	if(it_!=NULL)
 		delete it_;
 	//cv::destroyWindow(WINDOW);

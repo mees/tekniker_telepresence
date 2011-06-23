@@ -39,8 +39,6 @@ opencv2/highgui/highgui.hpp
 -
 tekniker_telepresence/camview.h
 ../include/tekniker_telepresence/tekniker_telepresence/camview.h
-tekniker_telepresence/worker.h
-../include/tekniker_telepresence/tekniker_telepresence/worker.h
 wx/bitmap.h
 -
 wx/image.h
@@ -69,16 +67,10 @@ wx/frame.h
 -
 wx/timer.h
 -
-
-../include/tekniker_telepresence/worker.h
-wx/wxprec.h
-../include/tekniker_telepresence/wx/wxprec.h
+wx/event.h
+-
 wx/thread.h
-../include/tekniker_telepresence/wx/thread.h
-tekniker_telepresence/camview.h
-../include/tekniker_telepresence/tekniker_telepresence/camview.h
-wx/wx.h
-../include/tekniker_telepresence/wx/wx.h
+-
 
 /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/include/sensor_msgs/image_encodings.h
 string

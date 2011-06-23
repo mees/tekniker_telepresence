@@ -2,7 +2,6 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/kinecta.dir/src/Main.o"
   "CMakeFiles/kinecta.dir/src/ui.o"
   "CMakeFiles/kinecta.dir/src/camview.o"
-  "CMakeFiles/kinecta.dir/src/worker.o"
   "../bin/kinecta.pdb"
   "../bin/kinecta"
 )

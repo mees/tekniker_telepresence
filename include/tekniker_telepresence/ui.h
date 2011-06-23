@@ -18,7 +18,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "tekniker_telepresence/camview.h"
-#include "tekniker_telepresence/worker.h"
 
 
 #include <wx/bitmap.h>
@@ -35,6 +34,8 @@
 #include <wx/stattext.h>
 #include <wx/frame.h>
 #include <wx/timer.h>
+#include <wx/event.h>
+#include <wx/thread.h>
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,8 +44,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class telepresenceFrame
 ///////////////////////////////////////////////////////////////////////////////
-class CCamView;
-class telepresenceFrame : public wxFrame
+
+
+class telepresenceFrame : public wxFrame, public wxThreadHelper
 {
 	private:
 		ros::NodeHandle nh_;
@@ -54,8 +56,6 @@ class telepresenceFrame : public wxFrame
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
-		IplImage _IplImg;
-		
 
 	
 	protected:
@@ -68,13 +68,15 @@ class telepresenceFrame : public wxFrame
 		wxStaticText* m_staticText2;
 		int m_nWidth;
 		int m_nHeight;
-		wxPanel*	m_pMainPanel;
 		CCamView*	m_pCameraView;
 		CCamView*	m_pCameraView2;
-		CwxopencvWorker*	m_pWxopencvWorker;
+		//wxCriticalSection mutex;
+		IplImage _IplImg;
+		IplImage *_IplImg2;
 
 
 		void onUpdate(wxTimerEvent& evt);
+		void OnClose(wxCloseEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
@@ -84,6 +86,9 @@ class telepresenceFrame : public wxFrame
 		virtual void RecvLeftKey( wxCommandEvent& event );
 		virtual void RecvRightKey( wxCommandEvent& event );
 		virtual void RecvDownKey( wxCommandEvent& event );
+		virtual wxThread::ExitCode Entry();
+		void OnThreadUpdate(wxCommandEvent& evt);
+		DECLARE_EVENT_TABLE();
 		
 	
 	public:
@@ -91,7 +96,6 @@ class telepresenceFrame : public wxFrame
 		telepresenceFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("ui"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,600 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~telepresenceFrame();
 		
-	
 };
 
 #endif //__ui__

@@ -128,7 +128,6 @@ void CCamView::Draw( wxDC& dc )
 ////////////////////////////////////////////////////////////////////
 void CCamView::DrawCam( IplImage* pImg )
 {
-
 	if( m_bDrawing ) return;
 	m_bDrawing = true;
 
@@ -138,9 +137,6 @@ void CCamView::DrawCam( IplImage* pImg )
         IplImage* pDstImg = cvCloneImage( pImg ); 
 		int nCamWidth = pImg->width;
 		int nCamHeight =pImg->height;
-		//printf("drawcam m_nWidth:%d m_nHeight:%d\n",m_nWidth, m_nHeight);
-
-
 		// process image from opencv to wxwidgets
 		unsigned char *rawData;
 		// draw my stuff to output canvas
