@@ -147,8 +147,14 @@ void CCamView::DrawCam( IplImage* pImg )
 		// convert data from raw image to wxImg 
 		wxImage pWxImg = wxImage( nCamWidth, nCamHeight, rawData, TRUE );
 		// convert to bitmap to be used by the window to draw
-		//m_pBitmap = wxBitmap( pWxImg.Scale(m_nWidth, m_nHeight) );
+		if(m_nWidth<640 && m_nHeight<480)
+		{
+		m_pBitmap = wxBitmap( pWxImg.Scale(m_nWidth, m_nHeight) );
+		}
+		else
+		{
 		m_pBitmap = wxBitmap( pWxImg );
+		}
 		m_bNewImage = true;
 		m_bDrawing = false;
 

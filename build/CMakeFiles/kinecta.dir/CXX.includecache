@@ -798,16 +798,6 @@ vector
 time.h
 -
 
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp
-wx/wx.h
--
-wx/app.h
--
-tekniker_telepresence/ui.h
-/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/tekniker_telepresence/ui.h
-ros/ros.h
--
-
 /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp
 tekniker_telepresence/ui.h
 /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/tekniker_telepresence/ui.h

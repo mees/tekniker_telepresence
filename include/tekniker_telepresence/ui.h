@@ -51,8 +51,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 	private:
 		ros::NodeHandle nh_;
 		image_transport::Subscriber image_color;
-		ros::Subscriber coordX_sub_;
-		ros::Subscriber coordY_sub_;
+		ros::Publisher my_webcam;
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
