@@ -7,15 +7,16 @@
 
 namespace enc = sensor_msgs::image_encodings;
 
-
-int RGBcoordX, RGBcoordY;
+static const double pi = 3.14159265358979323846;
 
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE, -1)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
 BEGIN_EVENT_TABLE(telepresenceFrame, wxFrame)
 	EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, telepresenceFrame::OnThreadUpdate)
 END_EVENT_TABLE()
-        
+
+//tell the action client that we want to spin a thread by default
+
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
@@ -120,6 +121,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
+	ac= new MoveBaseClient("move_base", true);
 	//cv::namedWindow(WINDOW);
 	
 	// Connect Events
@@ -134,6 +136,11 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     update_timer_->Start(16);
 
    Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
+     //wait for the action server to come up
+  //while(!ac.waitForServer(ros::Duration(5.0))){
+    //ROS_INFO("Waiting for the move_base action server to come up");
+  //}
+
 }
 
 	
@@ -145,6 +152,65 @@ void telepresenceFrame::RecvUpKey( wxCommandEvent& event )
 void telepresenceFrame::RecvLeftKey( wxCommandEvent& event )
 {
 	printf("RecvLeftKey");
+	btQuaternion quat;
+    quat.setRPY(0.0, 0.0, pi/2);
+    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+    
+    goal.target_pose.header.stamp=ros::Time::now();
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = 0.5;
+    goal.target_pose.pose.position.y = 0;
+    goal.target_pose.pose.position.z = 0;
+//MoveBaseClient ac("move_base", true);
+while(!ac->waitForServer(ros::Duration(5.0))){
+    ROS_INFO("Waiting for the move_base action server to come up");
+  }
+	ros::spinOnce();
+
+               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+               {
+                       goal.target_pose.header.stamp = ros::Time::now();
+                       ROS_INFO("Sending goal");
+                       switch(ac->getState()){
+					   case actionlib::SimpleClientGoalState::PENDING: printf("pending1\n"); break;
+					   case actionlib::SimpleClientGoalState::ACTIVE: printf("active1\n"); break;
+					   case actionlib::SimpleClientGoalState::RECALLED:printf("recalled1\n"); break;
+					   case actionlib::SimpleClientGoalState::REJECTED:printf("rejected1\n"); break;
+					   case actionlib::SimpleClientGoalState::PREEMPTED:printf("preempted1\n"); break;
+					   case actionlib::SimpleClientGoalState::ABORTED:printf("aborted1\n"); break;
+					   case actionlib::SimpleClientGoalState::SUCCEEDED:printf("succeeded1\n"); break;
+					   case actionlib::SimpleClientGoalState::LOST: printf("lost1\n"); break;
+					   }
+                       ac->sendGoal(goal);
+					   //switch(ac->getState()){
+					   //case actionlib::PENDING: printf("pending2\n"); break;
+					   //case actionlib::ACTIVE: printf("active2\n"); break;
+					   //case actionlib::RECALLED:printf("recalled2\n"); break;
+					   //case actionlib::REJECTED:printf("rejected2\n"); break;
+					   //case actionlib::PREEMPTED:printf("preempted2\n"); break;
+					   //case actionlib::ABORTED:printf("aborted2\n"); break;
+					   //case actionlib::SUCCEEDED:printf("succeeded2\n"); break;
+					   //case actionlib::LOST:   printf("lost2\n"); break;
+					   //}
+                       ac->waitForResult();
+					   //switch(ac->getState()){
+					   //case actionlib::PENDING: printf("pending3\n"); break;
+					   //case actionlib::ACTIVE: printf("active3\n"); break;
+					   //case actionlib::RECALLED:printf("recalled3\n"); break;
+					   //case actionlib::REJECTED:printf("rejected3\n"); break;
+					   //case actionlib::PREEMPTED:printf("preempted3\n"); break;
+					   //case actionlib::ABORTED:printf("aborted3\n"); break;
+					   //case actionlib::SUCCEEDED:printf("succeeded3\n"); break;
+					   //case actionlib::LOST:   printf("lost3\n"); break;
+					   //}
+                       if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+                               ROS_INFO("He llegado correctamente al objetivo");
+                       else
+                               ROS_INFO("No he conseguido llegar al objetivo");
+               }
+               else
+                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+
 }
 
 void telepresenceFrame::RecvRightKey( wxCommandEvent& event )
@@ -203,15 +269,6 @@ uint8[] data*/
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-	//if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-			//{
-				//if (RGBcoordX >= 0 && RGBcoordY >= 0)
-					//{
-				//cv::circle(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY), 50, CV_RGB(255,0,0), 3, 8, 0);
-				//cv::line(cv_ptr->image, cv::Point(RGBcoordX - 70, RGBcoordY), cv::Point(RGBcoordX + 70, RGBcoordY), CV_RGB(255,0,0), 3, 8, 0);					
-				//cv::line(cv_ptr->image, cv::Point(RGBcoordX, RGBcoordY - 70), cv::Point(RGBcoordX, RGBcoordY + 70), CV_RGB(255,0,0), 3, 8, 0);	
-					//}
-			//}
 	
 	//cv::imshow(WINDOW, cv_ptr->image);
 	//image_pub_.publish(cv_ptr->toImageMsg());
@@ -279,6 +336,8 @@ telepresenceFrame::~telepresenceFrame()
 	delete m_pCameraView2;
 	if(it_!=NULL)
 		delete it_;
+	if(ac!=NULL)
+		delete ac;
 	if (GetThread() && GetThread()->IsRunning())
 	{
 		printf("deleta thread\n");

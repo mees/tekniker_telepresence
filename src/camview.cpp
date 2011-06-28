@@ -82,7 +82,7 @@ CCamView::~CCamView( )
 void CCamView::OnPaint( wxPaintEvent& event )
 {
 	wxPaintDC dc(this);
-	Draw( dc );
+	Draw(dc);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -99,7 +99,6 @@ void CCamView::Draw( wxDC& dc )
 
 		m_bDrawing = true;
 
-		dc.BeginDrawing();
 
 		int x,y,w,h;
 		dc.GetClippingBox( &x, &y, &w, &h );
@@ -113,7 +112,6 @@ void CCamView::Draw( wxDC& dc )
 			// draw inter frame ?
 		}
 
-		dc.EndDrawing();
 		m_bDrawing = false;
 
 	return;

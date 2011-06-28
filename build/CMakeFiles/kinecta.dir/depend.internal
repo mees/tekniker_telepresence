@@ -4,10 +4,54 @@
 CMakeFiles/kinecta.dir/src/Main.o
  ../include/tekniker_telepresence/camview.h
  ../include/tekniker_telepresence/ui.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/action_definition.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/action_client.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/client_goal_handle_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/client_helpers.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/comm_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/comm_state_machine_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/connection_monitor.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/goal_manager_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_action_client.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_client_goal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_goal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/terminal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/destruction_guard.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/enclosure_deleter.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/goal_id_generator.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/managed_list.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalID.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalStatus.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalStatusArray.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Point.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/PointStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Pose.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/PoseStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Quaternion.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/QuaternionStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Transform.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/TransformStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Twist.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/TwistStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Vector3.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/include/sensor_msgs/image_encodings.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/CameraInfo.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/Image.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/RegionOfInterest.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btMatrix3x3.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btMinMax.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btQuadWord.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btQuaternion.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btScalar.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btTransform.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btVector3.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/exceptions.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/tf.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/time_cache.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/transform_broadcaster.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/transform_datatypes.h
+ /opt/ros/diamondback/stacks/geometry/tf/msg_gen/cpp/include/tf/tfMessage.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/camera_publisher.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/camera_subscriber.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/exception.h
@@ -17,8 +61,17 @@ CMakeFiles/kinecta.dir/src/Main.o
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/single_subscriber_publisher.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/subscriber.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/transport_hints.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseAction.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionFeedback.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionGoal.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionResult.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseFeedback.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseGoal.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseResult.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/advertise_options.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/advertise_service_options.h
+ /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/callback_queue.h
+ /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/callback_queue_interface.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/common.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/exceptions.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/forwards.h
@@ -563,10 +616,54 @@ CMakeFiles/kinecta.dir/src/camview.o
 CMakeFiles/kinecta.dir/src/ui.o
  ../include/tekniker_telepresence/camview.h
  ../include/tekniker_telepresence/ui.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/action_definition.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/action_client.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/client_goal_handle_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/client_helpers.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/comm_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/comm_state_machine_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/connection_monitor.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/goal_manager_imp.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_action_client.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_client_goal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/simple_goal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/client/terminal_state.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/destruction_guard.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/enclosure_deleter.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/goal_id_generator.h
+ /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/managed_list.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalID.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalStatus.h
+ /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/cpp/include/actionlib_msgs/GoalStatusArray.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Point.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/PointStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Pose.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/PoseStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Quaternion.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/QuaternionStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Transform.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/TransformStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Twist.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/TwistStamped.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Vector3.h
+ /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/include/sensor_msgs/image_encodings.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/CameraInfo.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/Image.h
  /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include/sensor_msgs/RegionOfInterest.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btMatrix3x3.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btMinMax.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btQuadWord.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btQuaternion.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btScalar.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btTransform.h
+ /opt/ros/diamondback/stacks/geometry/bullet/include/LinearMath/btVector3.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/exceptions.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/tf.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/time_cache.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/transform_broadcaster.h
+ /opt/ros/diamondback/stacks/geometry/tf/include/tf/transform_datatypes.h
+ /opt/ros/diamondback/stacks/geometry/tf/msg_gen/cpp/include/tf/tfMessage.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/camera_publisher.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/camera_subscriber.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/exception.h
@@ -576,8 +673,17 @@ CMakeFiles/kinecta.dir/src/ui.o
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/single_subscriber_publisher.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/subscriber.h
  /opt/ros/diamondback/stacks/image_common/image_transport/include/image_transport/transport_hints.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseAction.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionFeedback.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionGoal.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseActionResult.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseFeedback.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseGoal.h
+ /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/cpp/include/move_base_msgs/MoveBaseResult.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/advertise_options.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/advertise_service_options.h
+ /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/callback_queue.h
+ /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/callback_queue_interface.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/common.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/exceptions.h
  /opt/ros/diamondback/stacks/ros_comm/clients/cpp/roscpp/include/ros/forwards.h

@@ -18,6 +18,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "tekniker_telepresence/camview.h"
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
+#include <tf/transform_broadcaster.h>
 
 
 #include <wx/bitmap.h>
@@ -45,6 +48,7 @@
 /// Class telepresenceFrame
 ///////////////////////////////////////////////////////////////////////////////
 
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
 class telepresenceFrame : public wxFrame, public wxThreadHelper
 {
@@ -72,6 +76,8 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		//wxCriticalSection mutex;
 		IplImage _IplImg;
 		IplImage *_IplImg2;
+		move_base_msgs::MoveBaseGoal goal;
+		MoveBaseClient* ac;//("move_base", true);
 
 
 		void onUpdate(wxTimerEvent& evt);

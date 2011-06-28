@@ -78,11 +78,22 @@ CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/ro
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosbagmigration/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/geometry/bullet/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/geometry/angles/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosnode/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosmsg/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/rostopic/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosservice/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilities/roswtf/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/geometry/tf/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common/actionlib/manifest.xml
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common/tinyxml/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common/pluginlib/manifest.xml
-CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/image_common/image_transport/manifest.xml
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
@@ -92,17 +103,22 @@ CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/tools/to
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/srv_gen/generated
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/geometry/tf/msg_gen/generated
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/geometry/tf/srv_gen/generated
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/common/actionlib/msg_gen/generated
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/generated
 	$(CMAKE_COMMAND) -E cmake_progress_report /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/kinecta.dir/src/Main.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/Main.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/Main.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp
 
 CMakeFiles/kinecta.dir/src/Main.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinecta.dir/src/Main.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp > CMakeFiles/kinecta.dir/src/Main.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp > CMakeFiles/kinecta.dir/src/Main.i
 
 CMakeFiles/kinecta.dir/src/Main.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinecta.dir/src/Main.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp -o CMakeFiles/kinecta.dir/src/Main.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp -o CMakeFiles/kinecta.dir/src/Main.s
 
 CMakeFiles/kinecta.dir/src/Main.o.requires:
 .PHONY : CMakeFiles/kinecta.dir/src/Main.o.requires
@@ -143,11 +159,22 @@ CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosb
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosbagmigration/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/geometry/bullet/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/geometry/angles/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosnode/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosmsg/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rostopic/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosservice/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/roswtf/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/geometry/tf/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common/actionlib/manifest.xml
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common/tinyxml/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common/pluginlib/manifest.xml
-CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/image_common/image_transport/manifest.xml
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
@@ -157,17 +184,22 @@ CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/tools/topi
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/srv_gen/generated
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/geometry/tf/msg_gen/generated
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/geometry/tf/srv_gen/generated
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/common/actionlib/msg_gen/generated
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/generated
 	$(CMAKE_COMMAND) -E cmake_progress_report /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/kinecta.dir/src/ui.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/ui.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/ui.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp
 
 CMakeFiles/kinecta.dir/src/ui.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinecta.dir/src/ui.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp > CMakeFiles/kinecta.dir/src/ui.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp > CMakeFiles/kinecta.dir/src/ui.i
 
 CMakeFiles/kinecta.dir/src/ui.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinecta.dir/src/ui.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp -o CMakeFiles/kinecta.dir/src/ui.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp -o CMakeFiles/kinecta.dir/src/ui.s
 
 CMakeFiles/kinecta.dir/src/ui.o.requires:
 .PHONY : CMakeFiles/kinecta.dir/src/ui.o.requires
@@ -208,11 +240,22 @@ CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosbagmigration/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/geometry/bullet/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/geometry/angles/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosnode/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosmsg/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools/rostopic/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools/rosservice/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/utilities/roswtf/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/geometry/tf/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common/actionlib/manifest.xml
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common/tinyxml/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common/pluginlib/manifest.xml
-CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/utilities/message_filters/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/image_common/image_transport/manifest.xml
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
@@ -222,17 +265,22 @@ CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/ros_comm/tools
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/geometry_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/msg_gen/generated
 CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/sensor_msgs/srv_gen/generated
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/geometry/tf/msg_gen/generated
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/geometry/tf/srv_gen/generated
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common_msgs/actionlib_msgs/msg_gen/generated
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/common/actionlib/msg_gen/generated
+CMakeFiles/kinecta.dir/src/camview.o: /opt/ros/diamondback/stacks/navigation/move_base_msgs/msg_gen/generated
 	$(CMAKE_COMMAND) -E cmake_progress_report /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/kinecta.dir/src/camview.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/camview.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/kinecta.dir/src/camview.o -c /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp
 
 CMakeFiles/kinecta.dir/src/camview.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kinecta.dir/src/camview.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp > CMakeFiles/kinecta.dir/src/camview.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp > CMakeFiles/kinecta.dir/src/camview.i
 
 CMakeFiles/kinecta.dir/src/camview.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kinecta.dir/src/camview.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp -o CMakeFiles/kinecta.dir/src/camview.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX -DTIXML_USE_STL -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/camview.cpp -o CMakeFiles/kinecta.dir/src/camview.s
 
 CMakeFiles/kinecta.dir/src/camview.o.requires:
 .PHONY : CMakeFiles/kinecta.dir/src/camview.o.requires
