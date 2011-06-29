@@ -134,19 +134,57 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
     update_timer_ = new wxTimer(this);
     update_timer_->Start(16);
+    Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
+    
+    checkGoal_timer=new wxTimer(this);
+    Connect(checkGoal_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::checkGoalState), NULL, this);
+    while(!ac->waitForServer(ros::Duration(5.0))){
+    ROS_INFO("Waiting for the move_base action server to come up");
+  }
 
-   Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
-     //wait for the action server to come up
-  //while(!ac.waitForServer(ros::Duration(5.0))){
-    //ROS_INFO("Waiting for the move_base action server to come up");
-  //}
 
 }
-
+void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
+{
+	actionlib::SimpleClientGoalState aux=ac->getState();
+	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
+	{
+		if(aux == actionlib::SimpleClientGoalState::SUCCEEDED)
+			ROS_INFO("He llegado correctamente al objetivo");
+        else
+            ROS_INFO("No he conseguido llegar al objetivo");
+        checkGoal_timer->Stop();
+	}
+	else
+	{
+		printf("pending edo active dago\n");
+	}
+}
 	
 void telepresenceFrame::RecvUpKey( wxCommandEvent& event )
 {
 	printf("RecvUpKey");
+	btQuaternion quat;
+    quat.setRPY(0.0, 0.0, 0);
+    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	goal.target_pose.header.stamp=ros::Time::now();
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = 1;
+    goal.target_pose.pose.position.y = 0;
+    goal.target_pose.pose.position.z = 0;
+
+	ros::spinOnce();
+
+               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+               {
+                       goal.target_pose.header.stamp = ros::Time::now();
+                       ROS_INFO("Sending goal");
+
+                       ac->sendGoal(goal);
+                      checkGoal_timer->Start(500);
+               }
+               else
+                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
 }
 
 void telepresenceFrame::RecvLeftKey( wxCommandEvent& event )
@@ -158,55 +196,19 @@ void telepresenceFrame::RecvLeftKey( wxCommandEvent& event )
     
     goal.target_pose.header.stamp=ros::Time::now();
 	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = 0.5;
+	goal.target_pose.pose.position.x = 0;
     goal.target_pose.pose.position.y = 0;
     goal.target_pose.pose.position.z = 0;
-//MoveBaseClient ac("move_base", true);
-while(!ac->waitForServer(ros::Duration(5.0))){
-    ROS_INFO("Waiting for the move_base action server to come up");
-  }
+
 	ros::spinOnce();
 
                if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
                {
                        goal.target_pose.header.stamp = ros::Time::now();
                        ROS_INFO("Sending goal");
-                       switch(ac->getState()){
-					   case actionlib::SimpleClientGoalState::PENDING: printf("pending1\n"); break;
-					   case actionlib::SimpleClientGoalState::ACTIVE: printf("active1\n"); break;
-					   case actionlib::SimpleClientGoalState::RECALLED:printf("recalled1\n"); break;
-					   case actionlib::SimpleClientGoalState::REJECTED:printf("rejected1\n"); break;
-					   case actionlib::SimpleClientGoalState::PREEMPTED:printf("preempted1\n"); break;
-					   case actionlib::SimpleClientGoalState::ABORTED:printf("aborted1\n"); break;
-					   case actionlib::SimpleClientGoalState::SUCCEEDED:printf("succeeded1\n"); break;
-					   case actionlib::SimpleClientGoalState::LOST: printf("lost1\n"); break;
-					   }
+
                        ac->sendGoal(goal);
-					   //switch(ac->getState()){
-					   //case actionlib::PENDING: printf("pending2\n"); break;
-					   //case actionlib::ACTIVE: printf("active2\n"); break;
-					   //case actionlib::RECALLED:printf("recalled2\n"); break;
-					   //case actionlib::REJECTED:printf("rejected2\n"); break;
-					   //case actionlib::PREEMPTED:printf("preempted2\n"); break;
-					   //case actionlib::ABORTED:printf("aborted2\n"); break;
-					   //case actionlib::SUCCEEDED:printf("succeeded2\n"); break;
-					   //case actionlib::LOST:   printf("lost2\n"); break;
-					   //}
-                       ac->waitForResult();
-					   //switch(ac->getState()){
-					   //case actionlib::PENDING: printf("pending3\n"); break;
-					   //case actionlib::ACTIVE: printf("active3\n"); break;
-					   //case actionlib::RECALLED:printf("recalled3\n"); break;
-					   //case actionlib::REJECTED:printf("rejected3\n"); break;
-					   //case actionlib::PREEMPTED:printf("preempted3\n"); break;
-					   //case actionlib::ABORTED:printf("aborted3\n"); break;
-					   //case actionlib::SUCCEEDED:printf("succeeded3\n"); break;
-					   //case actionlib::LOST:   printf("lost3\n"); break;
-					   //}
-                       if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-                               ROS_INFO("He llegado correctamente al objetivo");
-                       else
-                               ROS_INFO("No he conseguido llegar al objetivo");
+                      checkGoal_timer->Start(500);
                }
                else
                        ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
@@ -216,11 +218,54 @@ while(!ac->waitForServer(ros::Duration(5.0))){
 void telepresenceFrame::RecvRightKey( wxCommandEvent& event )
 {
 	printf("RecvRightKey");
+		btQuaternion quat;
+    quat.setRPY(0.0, 0.0, -pi/2);
+    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+    
+    goal.target_pose.header.stamp=ros::Time::now();
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = 0;
+    goal.target_pose.pose.position.y = 0;
+    goal.target_pose.pose.position.z = 0;
+
+	ros::spinOnce();
+
+               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+               {
+                       goal.target_pose.header.stamp = ros::Time::now();
+                       ROS_INFO("Sending goal");
+
+                       ac->sendGoal(goal);
+                      checkGoal_timer->Start(500);
+               }
+               else
+                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
 }
 
 void telepresenceFrame::RecvDownKey( wxCommandEvent& event )
 {
 	printf("RecvDownKey");
+    btQuaternion quat;
+    quat.setRPY(0.0, 0.0, 0);
+    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+    goal.target_pose.header.stamp=ros::Time::now();
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = -1;
+    goal.target_pose.pose.position.y = 0;
+    goal.target_pose.pose.position.z = 0;
+
+	ros::spinOnce();
+
+               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+               {
+                       goal.target_pose.header.stamp = ros::Time::now();
+                       ROS_INFO("Sending goal");
+
+                       ac->sendGoal(goal);
+                      checkGoal_timer->Start(500);
+               }
+               else
+                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
 }
 void telepresenceFrame::onUpdate(wxTimerEvent& evt)
 {
@@ -332,6 +377,7 @@ telepresenceFrame::~telepresenceFrame()
 	m_button61->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvRightKey ), NULL, this );
 	m_button58->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvDownKey ), NULL, this );
 	delete update_timer_;
+	delete checkGoal_timer;
 	delete m_pCameraView;
 	delete m_pCameraView2;
 	if(it_!=NULL)

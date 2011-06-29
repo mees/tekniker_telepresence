@@ -59,6 +59,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
+		wxTimer* checkGoal_timer;
 
 	
 	protected:
@@ -81,6 +82,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 
 
 		void onUpdate(wxTimerEvent& evt);
+		void checkGoalState(wxTimerEvent& evt);
 		void OnClose(wxCloseEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
