@@ -21,14 +21,14 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 {
 	//ShowFullScreen(true);
 	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
-	
+
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
-	
-	//bSizer1->SetMinSize( wxSize( 900,700 ) ); 
+
+	//bSizer1->SetMinSize( wxSize( 900,700 ) );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-	
+
 	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
 	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	int width, height;
@@ -36,7 +36,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	//printf("width:%d,height:%d\n",width,height);
 
 	m_pCameraView = new CCamView(this, wxPoint(5,15), wxSize(640, 480));
-	
+
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
 	// display my stuff
 	SetAutoLayout( TRUE );
@@ -55,100 +55,232 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 		return;
 	}
 	bSizer1->Add( bSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
+
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
-	
+
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	
+
 	m_button56 = new wxButton( this, wxID_ANY, wxT("Up"), wxDefaultPosition, wxDefaultSize, 0 );
-	
+
 	bSizer32->Add( m_button56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
+
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxVERTICAL );
-	
+
 	wxBoxSizer* bSizer37;
 	bSizer37 = new wxBoxSizer( wxVERTICAL );
-	
+
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
-	
+
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
-	
+
 	m_button57 = new wxButton( this, wxID_ANY, wxT("Left"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer35->Add( m_button57, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
+
 	bSizer38->Add( bSizer35, 1, wxEXPAND, 5 );
-	
+
 	m_button61 = new wxButton( this, wxID_ANY, wxT("Right"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer38->Add( m_button61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
+
 	bSizer37->Add( bSizer38, 1, wxEXPAND, 5 );
-	
+
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxVERTICAL );
-	
+
 	m_button58 = new wxButton( this, wxID_ANY, wxT("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer36->Add( m_button58, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
+
 	bSizer37->Add( bSizer36, 1, wxEXPAND, 5 );
-	
+
 	bSizer33->Add( bSizer37, 1, wxEXPAND, 5 );
-	
+
 	bSizer32->Add( bSizer33, 1, wxEXPAND, 5 );
-	
+
 	bSizer28->Add( bSizer32, 0, wxEXPAND, 5 );
-	
+
 	wxBoxSizer* bSizer39;
 	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Robot Status"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+
+
+	//m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Robot Status"), wxDefaultPosition, wxDefaultSize, 0 );
+	//m_staticText2->Wrap( -1 );
+	//m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
 	//bSizer39->Add( m_staticText2, 0, wxALL, 5 );
-	
+
 	bSizer28->Add( bSizer39, 1, wxEXPAND, 5 );
-	
+
 	bSizer1->Add( bSizer28, 0, wxEXPAND, 5 );
-	
+
 	this->SetSizer( bSizer1 );
 	this->Layout();
-	
+
 
 	it_=new image_transport::ImageTransport(nh_);
 	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	ac= new MoveBaseClient("move_base", true);
+	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 	//cv::namedWindow(WINDOW);
-	
 	// Connect Events
-	m_button56->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvUpKey ), NULL, this );
-	m_button57->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvLeftKey ), NULL, this );
-	m_button61->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvRightKey ), NULL, this );
-	m_button58->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvDownKey ), NULL, this );
+	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
+	m_button56->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvUpKeyRelease ), NULL, this );
+
+	m_button58->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvDownKeyPress ), NULL, this );
+	m_button58->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvDownKeyRelease ), NULL, this );
 	
+	m_button57->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvLeftKeyPress ), NULL, this );
+	m_button57->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvLeftKeyRelease ), NULL, this );
+	
+	m_button61->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPress ), NULL, this );
+	m_button61->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvRightKeyRelease ), NULL, this );
+
 	srand(time(NULL));
 
     update_timer_ = new wxTimer(this);
     update_timer_->Start(16);
     Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
-    
+
     checkGoal_timer=new wxTimer(this);
     Connect(checkGoal_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::checkGoalState), NULL, this);
-    //while(!ac->waitForServer(ros::Duration(5.0))){
-    //ROS_INFO("Waiting for the move_base action server to come up");
-  //}
-
-
+    goalUp_timer=new wxTimer(this);
+    Connect(goalUp_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalUp), NULL, this);
+    goalDown_timer=new wxTimer(this);
+    Connect(goalDown_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalDown), NULL, this);
+    goalLeft_timer=new wxTimer(this);
+    Connect(goalLeft_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalLeft), NULL, this);
+    goalRight_timer=new wxTimer(this);
+    Connect(goalRight_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalRight), NULL, this);
 }
+
+
+
+void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
+{
+	printf("down pressed\n");
+	while(!ac->waitForServer(ros::Duration(5.0))){
+	ROS_INFO("Waiting for the move_base action server to come up");
+	}
+	if(m_checkbox->GetValue()==true)
+	{
+		btQuaternion quat;
+	    quat.setRPY(0.0, 0.0, 0);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = -1;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+	
+		ros::spinOnce();
+
+	   if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+	   {
+		   goal.target_pose.header.stamp = ros::Time::now();
+		   ROS_INFO("Sending goal");
+	
+		   ac->sendGoal(goal);
+		   checkGoal_timer->Start(500);
+	   }
+	   else
+		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	}
+	else
+	{
+		 goalDown_timer->Start(200);
+	}
+}
+
+void telepresenceFrame::RecvDownKeyRelease(wxCommandEvent& event)
+{
+	printf("down released\n");
+	goalDown_timer->Stop();
+}
+
+void telepresenceFrame::sendGoalUp(wxTimerEvent& evt)
+{
+	printf("sendGoalUp\n");
+	vel.linear.x = 0.5; // m/s
+	vel.linear.y = 0.0; // m/s
+	vel.angular.z = 0.0; // rad/s
+	vel_pub.publish(vel);
+}
+
+void telepresenceFrame::sendGoalDown(wxTimerEvent& evt)
+{
+	printf("sendGoalDown\n");
+	vel.linear.x = -0.5; // m/s
+	vel.linear.y = 0.0; // m/s
+	vel.angular.z = 0.0; // rad/s
+	vel_pub.publish(vel);
+}
+
+void telepresenceFrame::sendGoalRight(wxTimerEvent& evt)
+{
+	printf("sendGoalRight\n");
+	vel.linear.x = 0.0; // m/s
+	vel.linear.y = 0.0; // m/s
+	vel.angular.z = 0.5; // rad/s
+	vel_pub.publish(vel);
+}
+
+void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
+{
+	printf("sendGoalLeft\n");
+	vel.linear.x = 0.0; // m/s
+	vel.linear.y = 0.0; // m/s
+	vel.angular.z = -0.5; // rad/s
+	vel_pub.publish(vel);
+}
+
+void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
+{
+	printf("left pressed");
+	while(!ac->waitForServer(ros::Duration(5.0))){
+	ROS_INFO("Waiting for the move_base action server to come up");
+	}
+	if(m_checkbox->GetValue()==true)
+	{
+		btQuaternion quat;
+		quat.setRPY(0.0, 0.0, 0);
+		tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+		goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 1;
+		goal.target_pose.pose.position.y = 0;
+		goal.target_pose.pose.position.z = 0;
+
+		ros::spinOnce();
+
+		if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+		{
+			goal.target_pose.header.stamp = ros::Time::now();
+			ROS_INFO("Sending goal");
+			ac->sendGoal(goal);
+			checkGoal_timer->Start(500);
+		}
+		else
+			ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	}
+	else
+	{
+		goalUp_timer->Start(200);
+	}
+}
+void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
+{
+	printf("left released\n");
+	goalUp_timer->Stop();
+}
+
 void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 {
+	printf("checkGoalState: %d\n",evt.GetId());
 	actionlib::SimpleClientGoalState aux=ac->getState();
 	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
 	{
@@ -163,112 +295,90 @@ void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 		printf("pending edo active dago\n");
 	}
 }
-	
-void telepresenceFrame::RecvUpKey( wxCommandEvent& event )
-{
-	printf("RecvUpKey");
-	btQuaternion quat;
-    quat.setRPY(0.0, 0.0, 0);
-    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-	goal.target_pose.header.stamp=ros::Time::now();
-	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = 1;
-    goal.target_pose.pose.position.y = 0;
-    goal.target_pose.pose.position.z = 0;
 
-	ros::spinOnce();
 
-               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-               {
-                       goal.target_pose.header.stamp = ros::Time::now();
-                       ROS_INFO("Sending goal");
-
-                       ac->sendGoal(goal);
-                      checkGoal_timer->Start(500);
-               }
-               else
-                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
-}
-
-void telepresenceFrame::RecvLeftKey( wxCommandEvent& event )
+void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 {
 	printf("RecvLeftKey");
-	btQuaternion quat;
-    quat.setRPY(0.0, 0.0, pi/2);
-    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-    
-    goal.target_pose.header.stamp=ros::Time::now();
-	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = 0;
-    goal.target_pose.pose.position.y = 0;
-    goal.target_pose.pose.position.z = 0;
-
-	ros::spinOnce();
-
-               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-               {
-                       goal.target_pose.header.stamp = ros::Time::now();
-                       ROS_INFO("Sending goal");
-
-                       ac->sendGoal(goal);
-                      checkGoal_timer->Start(500);
-               }
-               else
-                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
-
+	while(!ac->waitForServer(ros::Duration(5.0))){
+	ROS_INFO("Waiting for the move_base action server to come up");
+	}
+	if(m_checkbox->GetValue()==true)
+	{
+		btQuaternion quat;
+	    quat.setRPY(0.0, 0.0, pi/2);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 0;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+	
+		ros::spinOnce();
+	
+	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+	    {
+		   goal.target_pose.header.stamp = ros::Time::now();
+		   ROS_INFO("Sending goal");
+	
+		   ac->sendGoal(goal);
+		   checkGoal_timer->Start(500);
+	    }
+	    else
+			ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	}
+	else
+	{
+		goalLeft_timer->Start(200);
+	}
 }
 
-void telepresenceFrame::RecvRightKey( wxCommandEvent& event )
+void telepresenceFrame::RecvLeftKeyRelease( wxCommandEvent& event )
+{
+	printf("left release\n");
+	goalLeft_timer->Stop();
+}
+void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 {
 	printf("RecvRightKey");
+	while(!ac->waitForServer(ros::Duration(5.0))){
+	ROS_INFO("Waiting for the move_base action server to come up");
+	}
+	if(m_checkbox->GetValue()==true)
+	{
 		btQuaternion quat;
-    quat.setRPY(0.0, 0.0, -pi/2);
-    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-    
-    goal.target_pose.header.stamp=ros::Time::now();
-	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = 0;
-    goal.target_pose.pose.position.y = 0;
-    goal.target_pose.pose.position.z = 0;
+	    quat.setRPY(0.0, 0.0, -pi/2);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 0;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+	
+		ros::spinOnce();
 
-	ros::spinOnce();
+	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+	    {
+		   goal.target_pose.header.stamp = ros::Time::now();
+		   ROS_INFO("Sending goal");
 
-               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-               {
-                       goal.target_pose.header.stamp = ros::Time::now();
-                       ROS_INFO("Sending goal");
-
-                       ac->sendGoal(goal);
-                      checkGoal_timer->Start(500);
-               }
-               else
-                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+		   ac->sendGoal(goal);
+		   checkGoal_timer->Start(500);
+	    }
+	    else
+		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	}
+	else
+	{
+		goalRight_timer->Start(200);
+	}		
 }
-
-void telepresenceFrame::RecvDownKey( wxCommandEvent& event )
+void telepresenceFrame::RecvRightKeyRelease( wxCommandEvent& event )
 {
-	printf("RecvDownKey");
-    btQuaternion quat;
-    quat.setRPY(0.0, 0.0, 0);
-    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-    goal.target_pose.header.stamp=ros::Time::now();
-	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = -1;
-    goal.target_pose.pose.position.y = 0;
-    goal.target_pose.pose.position.z = 0;
-
-	ros::spinOnce();
-
-               if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-               {
-                       goal.target_pose.header.stamp = ros::Time::now();
-                       ROS_INFO("Sending goal");
-
-                       ac->sendGoal(goal);
-                      checkGoal_timer->Start(500);
-               }
-               else
-                       ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	printf("right release\n");
+	goalRight_timer->Stop();
 }
 void telepresenceFrame::onUpdate(wxTimerEvent& evt)
 {
@@ -278,7 +388,7 @@ void telepresenceFrame::onUpdate(wxTimerEvent& evt)
   {
     Close();
   }
-} 
+}
 
 
 void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
@@ -293,7 +403,7 @@ void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
 
 	image_pub_.publish(cv_ptr2.toImageMsg());
 }
-	
+
 void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& msg)
 {
 /*rosmsg show sensor_msgs/Image
@@ -317,7 +427,7 @@ uint8[] data*/
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-	
+
 	//cv::imshow(WINDOW, cv_ptr->image);
 	//image_pub_.publish(cv_ptr->toImageMsg());
 	//printf("imagecolorcallback: width:%d height:%d\n",cv_ptr->image.cols, cv_ptr->image.rows);
@@ -328,7 +438,7 @@ uint8[] data*/
 	////printf("imagecolorcallback2: width:%d height:%d\n",_IplImg.width, _IplImg.height);
 	//cvFlip(&aux,&_IplImg,1);
 	m_pCameraView->DrawCam(&_IplImg);
-	
+
   //ROS_INFO("I heard: [%d]", msg->data[0]);
 }
 
@@ -336,7 +446,7 @@ uint8[] data*/
         {
             CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
             cvSetCaptureProperty(capture,CV_CAP_PROP_CONVERT_RGB, false);
-			if ( !capture ) 
+			if ( !capture )
 			{
 				fprintf( stderr, "ERROR: capture is NULL \n" );
 				//getchar();
@@ -374,13 +484,24 @@ uint8[] data*/
 
 telepresenceFrame::~telepresenceFrame()
 {
-	// Disconnect Events
-	m_button56->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvUpKey ), NULL, this );
-	m_button57->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvLeftKey ), NULL, this );
-	m_button61->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvRightKey ), NULL, this );
-	m_button58->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( telepresenceFrame::RecvDownKey ), NULL, this );
+	// Disconnect Events	
+	m_button56->Disconnect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
+	m_button56->Disconnect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvUpKeyRelease ), NULL, this );
+
+	m_button58->Disconnect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvDownKeyPress ), NULL, this );
+	m_button58->Disconnect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvDownKeyRelease ), NULL, this );
+	
+	m_button57->Disconnect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvLeftKeyPress ), NULL, this );
+	m_button57->Disconnect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvLeftKeyRelease ), NULL, this );
+	
+	m_button61->Disconnect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPress ), NULL, this );
+	m_button61->Disconnect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvRightKeyRelease ), NULL, this );
 	delete update_timer_;
 	delete checkGoal_timer;
+	delete goalUp_timer;
+	delete goalDown_timer;
+	delete goalRight_timer;
+	delete goalLeft_timer;
 	delete m_pCameraView;
 	delete m_pCameraView2;
 	if(it_!=NULL)

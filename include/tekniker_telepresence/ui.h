@@ -21,6 +21,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_broadcaster.h>
+#include <geometry_msgs/Twist.h>
 
 
 #include <wx/bitmap.h>
@@ -57,10 +58,16 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		ros::NodeHandle nh_;
 		image_transport::Subscriber image_color;
 		ros::Publisher my_webcam;
+		ros::Publisher vel_pub;
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
 		wxTimer* checkGoal_timer;
+		wxTimer* goalUp_timer;
+		wxTimer* goalDown_timer;
+		wxTimer* goalLeft_timer;
+		wxTimer* goalRight_timer;
+		geometry_msgs::Twist vel;
 
 	
 	protected:
@@ -84,16 +91,25 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 
 		void onUpdate(wxTimerEvent& evt);
 		void checkGoalState(wxTimerEvent& evt);
+		void sendGoalUp(wxTimerEvent& evt);
+		void sendGoalDown(wxTimerEvent& evt);
+		void sendGoalRight(wxTimerEvent& evt);
+		void sendGoalLeft(wxTimerEvent& evt);
 		void OnClose(wxCloseEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void RecvUpKey( wxCommandEvent& event );
-		virtual void RecvLeftKey( wxCommandEvent& event );
-		virtual void RecvRightKey( wxCommandEvent& event );
-		virtual void RecvDownKey( wxCommandEvent& event );
+		virtual void RecvUpKeyPress(wxCommandEvent& event);
+		virtual void RecvUpKeyRelease(wxCommandEvent& event);
+		virtual void RecvDownKeyPress(wxCommandEvent& event);
+		virtual void RecvDownKeyRelease(wxCommandEvent& event);
+		virtual void RecvLeftKeyPress(wxCommandEvent& event);
+		virtual void RecvLeftKeyRelease(wxCommandEvent& event);
+		virtual void RecvRightKeyPress(wxCommandEvent& event);
+		virtual void RecvRightKeyRelease(wxCommandEvent& event);
+
 		virtual wxThread::ExitCode Entry();
 		void OnThreadUpdate(wxCommandEvent& evt);
 		DECLARE_EVENT_TABLE();
