@@ -38,6 +38,7 @@
 #include <wx/frame.h>
 #include <wx/timer.h>
 #include <wx/event.h>
+#include <wx/checkbox.h>
 #include <wx/thread.h>
 
 
@@ -70,15 +71,15 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxButton* m_button61;
 		wxButton* m_button58;
 		wxStaticText* m_staticText2;
+		wxCheckBox* m_checkbox;
 		int m_nWidth;
 		int m_nHeight;
 		CCamView*	m_pCameraView;
 		CCamView*	m_pCameraView2;
-		//wxCriticalSection mutex;
 		IplImage _IplImg;
 		IplImage *_IplImg2;
 		move_base_msgs::MoveBaseGoal goal;
-		MoveBaseClient* ac;//("move_base", true);
+		MoveBaseClient* ac;
 
 
 		void onUpdate(wxTimerEvent& evt);

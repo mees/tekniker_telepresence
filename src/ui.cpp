@@ -20,7 +20,7 @@ END_EVENT_TABLE()
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
-	this->SetSizeHints( wxSize( 1400,800 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -29,7 +29,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
-
+	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
+	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	int width, height;
 	this->GetClientSize(&width, &height);
 	//printf("width:%d,height:%d\n",width,height);
@@ -53,7 +54,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 		wxLogError(wxT("Could not run the worker thread!"));
 		return;
 	}
-	bSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
+	bSizer1->Add( bSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
@@ -62,6 +63,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
 	m_button56 = new wxButton( this, wxID_ANY, wxT("Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer32->Add( m_button56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxBoxSizer* bSizer33;
@@ -101,13 +103,14 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer28->Add( bSizer32, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer39;
-	bSizer39 = new wxBoxSizer( wxVERTICAL );
+	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
+	
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Robot Status"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
-	bSizer39->Add( m_staticText2, 0, wxALL, 5 );
+	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
+	//bSizer39->Add( m_staticText2, 0, wxALL, 5 );
 	
 	bSizer28->Add( bSizer39, 1, wxEXPAND, 5 );
 	
@@ -138,9 +141,9 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     
     checkGoal_timer=new wxTimer(this);
     Connect(checkGoal_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::checkGoalState), NULL, this);
-    while(!ac->waitForServer(ros::Duration(5.0))){
-    ROS_INFO("Waiting for the move_base action server to come up");
-  }
+    //while(!ac->waitForServer(ros::Duration(5.0))){
+    //ROS_INFO("Waiting for the move_base action server to come up");
+  //}
 
 
 }

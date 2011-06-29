@@ -75,6 +75,8 @@ wx/timer.h
 -
 wx/event.h
 -
+wx/checkbox.h
+-
 wx/thread.h
 -
 
