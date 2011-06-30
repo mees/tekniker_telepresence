@@ -41,6 +41,7 @@
 #include <wx/event.h>
 #include <wx/checkbox.h>
 #include <wx/thread.h>
+#include <wx/gauge.h>
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -67,6 +68,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxTimer* goalDown_timer;
 		wxTimer* goalLeft_timer;
 		wxTimer* goalRight_timer;
+		wxGauge* prgBar;
 		geometry_msgs::Twist vel;
 
 	

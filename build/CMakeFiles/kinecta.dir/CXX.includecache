@@ -81,6 +81,8 @@ wx/checkbox.h
 -
 wx/thread.h
 -
+wx/gauge.h
+-
 
 /opt/ros/diamondback/stacks/common/actionlib/include/actionlib/action_definition.h
 

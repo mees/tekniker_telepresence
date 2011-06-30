@@ -105,12 +105,20 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer39;
 	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
 
-
-	//m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Robot Status"), wxDefaultPosition, wxDefaultSize, 0 );
+	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
+	prgBar->SetValue(70);
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
 	//m_staticText2->Wrap( -1 );
-	//m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	wxBoxSizer* bSizer40;
+	bSizer40 = new wxBoxSizer( wxVERTICAL );
+	
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
-	//bSizer39->Add( m_staticText2, 0, wxALL, 5 );
+	bSizer40->Add( m_staticText2, 0, wxALL, 5 );
+	bSizer40->Add( prgBar, 0, wxALL, 5 );
+	
+	bSizer39->Add(bSizer40,0,wxEXPAND,5);
 
 	bSizer28->Add( bSizer39, 1, wxEXPAND, 5 );
 
