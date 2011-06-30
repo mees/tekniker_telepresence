@@ -111,6 +111,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		virtual void RecvLeftKeyRelease(wxCommandEvent& event);
 		virtual void RecvRightKeyPress(wxCommandEvent& event);
 		virtual void RecvRightKeyRelease(wxCommandEvent& event);
+		virtual void RecvRightKeyPressOnImage(wxCommandEvent& event);
 
 		virtual wxThread::ExitCode Entry();
 		void OnThreadUpdate(wxCommandEvent& evt);

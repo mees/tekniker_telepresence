@@ -147,6 +147,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	
 	m_button61->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPress ), NULL, this );
 	m_button61->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvRightKeyRelease ), NULL, this );
+	
+	m_pCameraView->Connect(wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPressOnImage ), NULL, this );
 
 	srand(time(NULL));
 
@@ -166,7 +168,12 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     Connect(goalRight_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalRight), NULL, this);
 }
 
-
+void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
+{
+int mx = wxGetMousePosition().x - this->GetScreenPosition().x;
+int my = wxGetMousePosition().y - this->GetScreenPosition().y;
+printf("x:%d, y:%d\n",mx,my);
+}
 
 void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 {
