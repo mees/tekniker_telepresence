@@ -125,6 +125,7 @@ CMakeFiles/kinecta.dir/src/Main.o
  /opt/ros/diamondback/stacks/ros_comm/utilities/rostime/include/ros/time.h
  /opt/ros/diamondback/stacks/ros_comm/utilities/xmlrpcpp/src/XmlRpcValue.h
  /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/Main.cpp
+ /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/CvBridge.h
  /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
  /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cv.h
  /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cvaux.h
@@ -737,6 +738,7 @@ CMakeFiles/kinecta.dir/src/ui.o
  /opt/ros/diamondback/stacks/ros_comm/utilities/rostime/include/ros/time.h
  /opt/ros/diamondback/stacks/ros_comm/utilities/xmlrpcpp/src/XmlRpcValue.h
  /opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/src/ui.cpp
+ /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/CvBridge.h
  /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
  /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cv.h
  /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cvaux.h

@@ -8,11 +8,14 @@
 #ifndef __ui__
 #define __ui__
 
+#define SINFOV 0.520264473
+
 #include <ros/ros.h>
 #include "std_msgs/String.h"
 #include "sensor_msgs/Image.h"
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/CvBridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <std_msgs/Int32.h>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -58,6 +61,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 	private:
 		ros::NodeHandle nh_;
 		image_transport::Subscriber image_color;
+		image_transport::Subscriber image_depth;
 		ros::Publisher my_webcam;
 		ros::Publisher vel_pub;
 		image_transport::Publisher image_pub_;
@@ -70,6 +74,8 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxTimer* goalRight_timer;
 		wxGauge* prgBar;
 		geometry_msgs::Twist vel;
+		sensor_msgs::CvBridge bridge;
+		
 
 	
 	protected:
@@ -89,6 +95,14 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		IplImage *_IplImg2;
 		move_base_msgs::MoveBaseGoal goal;
 		MoveBaseClient* ac;
+		wxMutex s_mutex;
+		wxCriticalSection cs;
+		IplImage *PointCloud_image;
+		CvScalar s;
+		int my;
+		int mx;
+		bool changed;
+
 
 
 		void onUpdate(wxTimerEvent& evt);
@@ -99,6 +113,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void sendGoalLeft(wxTimerEvent& evt);
 		void OnClose(wxCloseEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
+		void imageDepth_callback(const sensor_msgs::ImageConstPtr& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
 		

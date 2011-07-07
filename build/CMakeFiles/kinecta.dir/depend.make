@@ -124,6 +124,7 @@ CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilitie
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilities/rostime/include/ros/time.h
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/ros_comm/utilities/xmlrpcpp/src/XmlRpcValue.h
 CMakeFiles/kinecta.dir/src/Main.o: ../src/Main.cpp
+CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/CvBridge.h
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cv.h
 CMakeFiles/kinecta.dir/src/Main.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cvaux.h
@@ -736,6 +737,7 @@ CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/rostime/include/ros/time.h
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/ros_comm/utilities/xmlrpcpp/src/XmlRpcValue.h
 CMakeFiles/kinecta.dir/src/ui.o: ../src/ui.cpp
+CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/CvBridge.h
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cv.h
 CMakeFiles/kinecta.dir/src/ui.o: /opt/ros/diamondback/stacks/vision_opencv/opencv2/opencv/include/opencv/cvaux.h

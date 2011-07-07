@@ -29,6 +29,8 @@ image_transport/image_transport.h
 -
 cv_bridge/cv_bridge.h
 -
+cv_bridge/CvBridge.h
+-
 sensor_msgs/image_encodings.h
 -
 std_msgs/Int32.h
@@ -1599,6 +1601,16 @@ cstdlib
 -
 ctime
 -
+
+/opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/CvBridge.h
+stdexcept
+-
+sensor_msgs/Image.h
+/opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/sensor_msgs/Image.h
+opencv/cxcore.h
+/opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/opencv/cxcore.h
+opencv/cv.h
+/opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/opencv/cv.h
 
 /opt/ros/diamondback/stacks/vision_opencv/cv_bridge/include/cv_bridge/cv_bridge.h
 sensor_msgs/Image.h

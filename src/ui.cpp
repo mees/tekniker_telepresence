@@ -16,7 +16,7 @@ BEGIN_EVENT_TABLE(telepresenceFrame, wxFrame)
 END_EVENT_TABLE()
 
 //tell the action client that we want to spin a thread by default
-
+int a =0;
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
@@ -127,11 +127,15 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	this->SetSizer( bSizer1 );
 	this->Layout();
 
+	changed=false;
+	mx=0;
+	my=0;
 
 	it_=new image_transport::ImageTransport(nh_);
 	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
+	image_depth = it_->subscribe("/camera/depth/image", 1, &telepresenceFrame::imageDepth_callback, this);
 	ac= new MoveBaseClient("move_base", true);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 	//cv::namedWindow(WINDOW);
@@ -170,11 +174,112 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 {
-int mx = wxGetMousePosition().x - this->GetScreenPosition().x;
-int my = wxGetMousePosition().y - this->GetScreenPosition().y;
+mx = wxGetMousePosition().x - this->GetScreenPosition().x;
+my = wxGetMousePosition().y - this->GetScreenPosition().y;
+changed=true;
 printf("x:%d, y:%d\n",mx,my);
+//float columnaX = (mx - 320.0);
+//float angle = asin((columnaX/320.0) * SINFOV);
+//printf("angle:%f\n",angle);
+////CvScalar s;
+////s_mutex.Lock();
+////wxCriticalSectionLocker lock(cs);
+////s=cvGet2D(PointCloud_image,mx,my);
+////s_mutex.Unlock();
+//printf("s.val1:%f\n",s.val[0]);
+//int aux;
+//if (s.val[0]!=s.val[0])
+//{
+//printf("s.val[0]!=s.val[0]\n");
+	//aux = 0;
+//}
+//else{
+ //if (s.val[0]>5.12){ 
+		//printf("s.val[0]>5.12\n");
+		//aux = 255;
+	//}else {
+	//printf("else\n");
+	//aux = (int)(s.val[0] * 1000) / 20;
+	//}
+//s.val[0] = aux;
+//}
+////cvSet2D(PointCloud_RGB_image,zz1,zz2,s);
+//printf("s.val2:%f\n",s.val[0]);				
+//float peopleZ = s.val[0] / 1000.0; // en metros
+//float goalPositionX = cos(angle) * peopleZ;
+//float goalPositionY = sin(angle) * peopleZ;
+//printf("goalX:%f goalY:%f, z:%f\n",goalPositionX,goalPositionY,peopleZ);
+
 }
 
+void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& msg)
+{
+	//printf("kaixoooo\n");
+	//wxMutexLocker lock(s_mutex);
+	//wxCriticalSectionLocker lock(cs);
+	if(changed)
+	{
+	changed=false;
+	PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
+	try{
+	s=cvGet2D(PointCloud_image,mx,my);
+	}catch(cv::Exception& e)
+	{
+		printf("exception\n");
+		printf("s.val[0] ex:%f\n",s.val[0]);
+	}
+	float columnaX = (mx - 320.0);
+	float angle = asin((columnaX/320.0) * SINFOV);
+	printf("angle:%f\n",angle);
+	printf("s.val1:%f\n",s.val[0]);
+	//int aux;
+	//if (s.val[0]!=s.val[0])
+	//{
+	//printf("s.val[0]!=s.val[0]\n");
+		//aux = 0;
+	//}
+	//else{
+	 //if (s.val[0]>5.12){ 
+			//printf("s.val[0]>5.12\n");
+			//aux = 255;
+		//}else {
+		//printf("else\n");
+		//aux = (int)(s.val[0] * 1000) / 20;
+		//}
+	//s.val[0] = aux;
+	//}
+	//printf("s.val2:%f\n",s.val[0]);				
+	float peopleZ = s.val[0] / 1000.0; // en metros
+	printf("peopleZ:%f\n",peopleZ);
+	printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
+	while(!ac->waitForServer(ros::Duration(5.0))){
+	ROS_INFO("Waiting for the move_base action server to come up");
+	}
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = cos(angle) * peopleZ;
+	goal.target_pose.pose.position.y = sin(angle) * peopleZ;
+	printf("goalX:%d goalY:%d\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
+	goal.target_pose.pose.position.z=0;
+	btQuaternion quat;
+	quat.setRPY(0.0, 0.0, 0.0);
+	tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	goal.target_pose.header.stamp = ros::Time::now();
+	ros::spinOnce();	
+    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+    {
+	   goal.target_pose.header.stamp = ros::Time::now();
+	   ROS_INFO("Sending goal");
+
+	   ac->sendGoal(goal);
+	   checkGoal_timer->Start(500);
+    }
+    else
+    {
+		ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	}
+	}
+	
+}
 void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 {
 	printf("down pressed\n");
@@ -295,7 +400,6 @@ void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
 
 void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 {
-	printf("checkGoalState: %d\n",evt.GetId());
 	actionlib::SimpleClientGoalState aux=ac->getState();
 	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
 	{
