@@ -178,70 +178,54 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
 	printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
 mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
-my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-29;
+my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-27;
 changed=true;
 printf("x:%d, y:%d\n",mx,my);
-//float columnaX = (mx - 320.0);
-//float angle = asin((columnaX/320.0) * SINFOV);
-//printf("angle:%f\n",angle);
-////CvScalar s;
-////s_mutex.Lock();
-////wxCriticalSectionLocker lock(cs);
-////s=cvGet2D(PointCloud_image,mx,my);
-////s_mutex.Unlock();
-//printf("s.val1:%f\n",s.val[0]);
-//int aux;
-//if (s.val[0]!=s.val[0])
-//{
-//printf("s.val[0]!=s.val[0]\n");
-	//aux = 0;
-//}
-//else{
- //if (s.val[0]>5.12){ 
-		//printf("s.val[0]>5.12\n");
-		//aux = 255;
-	//}else {
-	//printf("else\n");
-	//aux = (int)(s.val[0] * 1000) / 20;
-	//}
-//s.val[0] = aux;
-//}
-////cvSet2D(PointCloud_RGB_image,zz1,zz2,s);
-//printf("s.val2:%f\n",s.val[0]);				
-//float peopleZ = s.val[0] / 1000.0; // en metros
-//float goalPositionX = cos(angle) * peopleZ;
-//float goalPositionY = sin(angle) * peopleZ;
-//printf("goalX:%f goalY:%f, z:%f\n",goalPositionX,goalPositionY,peopleZ);
-
 }
 
 void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& msg)
 {
-	//printf("kaixoooo\n");
-	//wxMutexLocker lock(s_mutex);
-	//wxCriticalSectionLocker lock(cs);
 	if(changed)
 	{
 	changed=false;
 	PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
+	float tmp;
+	int count=0;
+	float peopleZ=0;
 	try{
-	s=cvGet2D(PointCloud_image,my ,mx);
+		if((mx>5 && my>5) && (mx<635 &&my<475))
+		{
+			for (int a=my-5;a<my+5;a++)
+			{
+				for (int b=mx-5;b<mx+5;b++)
+				{
+					s=cvGet2D(PointCloud_image,a ,b);
+					if (s.val[0]!=s.val[0])
+					{
+					printf("s.val[0]!=s.val[0]\n");
+						s.val[0]  = 0;
+					}
+					tmp=tmp+s.val[0];
+					count++;
+				}
+			}
+			peopleZ=tmp/count;
+		}
+		else
+		{
+			printf("ertzetan klikatu dezu!\n");
+			peopleZ=0;
+		}
+		
 	}catch(cv::Exception& e)
 	{
 		printf("exception\n");
-		printf("s.val[0] ex:%f\n",s.val[0]);
 	}
+	
 	float columnaX = (mx - 320.0);
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
-	printf("s.val1:%f\n",s.val[0]);
-	if (s.val[0]!=s.val[0])
-	{
-	printf("s.val[0]!=s.val[0]\n");
-		s.val[0]  = 0;
-	}
-	//printf("s.val2:%f\n",s.val[0]);				
-	float peopleZ = s.val[0]; /// 1000.0; // en metros
+	printf("count:%d\n",count);
 	printf("peopleZ:%f\n",peopleZ);
 	printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
 	while(!ac->waitForServer(ros::Duration(5.0))){
