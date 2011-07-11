@@ -174,8 +174,11 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 {
-mx = wxGetMousePosition().x - this->GetScreenPosition().x;
-my = wxGetMousePosition().y - this->GetScreenPosition().y;
+	printf("x1:%d y1:%d\n",this->GetScreenPosition().x,this->GetScreenPosition().y);
+	printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
+	printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
+mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
+my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-29;
 changed=true;
 printf("x:%d, y:%d\n",mx,my);
 //float columnaX = (mx - 320.0);
@@ -222,7 +225,7 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	changed=false;
 	PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
 	try{
-	s=cvGet2D(PointCloud_image,mx,my);
+	s=cvGet2D(PointCloud_image,my ,mx);
 	}catch(cv::Exception& e)
 	{
 		printf("exception\n");
@@ -232,24 +235,13 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
 	printf("s.val1:%f\n",s.val[0]);
-	//int aux;
-	//if (s.val[0]!=s.val[0])
-	//{
-	//printf("s.val[0]!=s.val[0]\n");
-		//aux = 0;
-	//}
-	//else{
-	 //if (s.val[0]>5.12){ 
-			//printf("s.val[0]>5.12\n");
-			//aux = 255;
-		//}else {
-		//printf("else\n");
-		//aux = (int)(s.val[0] * 1000) / 20;
-		//}
-	//s.val[0] = aux;
-	//}
+	if (s.val[0]!=s.val[0])
+	{
+	printf("s.val[0]!=s.val[0]\n");
+		s.val[0]  = 0;
+	}
 	//printf("s.val2:%f\n",s.val[0]);				
-	float peopleZ = s.val[0] / 1000.0; // en metros
+	float peopleZ = s.val[0]; /// 1000.0; // en metros
 	printf("peopleZ:%f\n",peopleZ);
 	printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
 	while(!ac->waitForServer(ros::Duration(5.0))){
@@ -258,7 +250,7 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	goal.target_pose.header.frame_id = "/base_link";
 	goal.target_pose.pose.position.x = cos(angle) * peopleZ;
 	goal.target_pose.pose.position.y = sin(angle) * peopleZ;
-	printf("goalX:%d goalY:%d\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
+	printf("goalX:%f goalY:%f\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
 	goal.target_pose.pose.position.z=0;
 	btQuaternion quat;
 	quat.setRPY(0.0, 0.0, 0.0);
