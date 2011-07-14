@@ -189,7 +189,7 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	{
 	changed=false;
 	PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
-	float tmp;
+	float tmp=0;
 	int count=0;
 	float peopleZ=0;
 	try{
@@ -202,14 +202,24 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 					s=cvGet2D(PointCloud_image,a ,b);
 					if (s.val[0]!=s.val[0])
 					{
-					printf("s.val[0]!=s.val[0]\n");
+						printf("s.val[0]!=s.val[0]\n");
 						s.val[0]  = 0;
 					}
+					else
+					{
 					tmp=tmp+s.val[0];
 					count++;
+					}
 				}
 			}
-			peopleZ=tmp/count;
+			if (count==0)
+			{
+				peopleZ=0;
+			}
+			else
+			{
+				peopleZ=tmp/count;
+			}
 		}
 		else
 		{

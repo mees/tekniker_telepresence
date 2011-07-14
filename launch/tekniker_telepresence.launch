@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="tekniker_telepresence" pkg="tekniker_telepresence" type="kinecta" output="screen"/>
+  <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
+    <param name="bitrate" value="320"/>
+  </node>
+
+</launch>
