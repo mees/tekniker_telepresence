@@ -157,7 +157,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	srand(time(NULL));
 
     update_timer_ = new wxTimer(this);
-    update_timer_->Start(16);
+    update_timer_->Start(100);
     Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
 
     checkGoal_timer=new wxTimer(this);
@@ -250,7 +250,7 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	quat.setRPY(0.0, 0.0, 0.0);
 	tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
 	goal.target_pose.header.stamp = ros::Time::now();
-	ros::spinOnce();	
+
     if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
     {
 	   goal.target_pose.header.stamp = ros::Time::now();
@@ -283,7 +283,6 @@ void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 	    goal.target_pose.pose.position.y = 0;
 	    goal.target_pose.pose.position.z = 0;
 	
-		ros::spinOnce();
 
 	   if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
 	   {
@@ -361,7 +360,6 @@ void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 		goal.target_pose.pose.position.y = 0;
 		goal.target_pose.pose.position.z = 0;
 
-		ros::spinOnce();
 
 		if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
 		{
@@ -420,7 +418,6 @@ void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 	    goal.target_pose.pose.position.y = 0;
 	    goal.target_pose.pose.position.z = 0;
 	
-		ros::spinOnce();
 	
 	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
 	    {
@@ -462,7 +459,6 @@ void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 	    goal.target_pose.pose.position.y = 0;
 	    goal.target_pose.pose.position.z = 0;
 	
-		ros::spinOnce();
 
 	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
 	    {
