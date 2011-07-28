@@ -64,6 +64,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		image_transport::Subscriber image_depth;
 		ros::Publisher my_webcam;
 		ros::Publisher vel_pub;
+		ros::Publisher goal_pub;
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
@@ -93,7 +94,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		CCamView*	m_pCameraView2;
 		IplImage _IplImg;
 		IplImage *_IplImg2;
-		move_base_msgs::MoveBaseGoal goal;
+		geometry_msgs::PoseStamped goal;
 		MoveBaseClient* ac;
 		wxMutex s_mutex;
 		wxCriticalSection cs;
@@ -106,7 +107,6 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 
 
 		void onUpdate(wxTimerEvent& evt);
-		void checkGoalState(wxTimerEvent& evt);
 		void sendGoalUp(wxTimerEvent& evt);
 		void sendGoalDown(wxTimerEvent& evt);
 		void sendGoalRight(wxTimerEvent& evt);

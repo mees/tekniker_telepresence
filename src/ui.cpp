@@ -136,9 +136,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	image_depth = it_->subscribe("/camera/depth/image", 1, &telepresenceFrame::imageDepth_callback, this);
-	ac= new MoveBaseClient("move_base", true);
+	goal_pub = nh_.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
-	//cv::namedWindow(WINDOW);
 	// Connect Events
 	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
 	m_button56->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvUpKeyRelease ), NULL, this );
@@ -160,8 +159,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     update_timer_->Start(100);
     Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
 
-    checkGoal_timer=new wxTimer(this);
-    Connect(checkGoal_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::checkGoalState), NULL, this);
     goalUp_timer=new wxTimer(this);
     Connect(goalUp_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalUp), NULL, this);
     goalDown_timer=new wxTimer(this);
@@ -177,10 +174,10 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	printf("x1:%d y1:%d\n",this->GetScreenPosition().x,this->GetScreenPosition().y);
 	printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
 	printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
-mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
-my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-27;
-changed=true;
-printf("x:%d, y:%d\n",mx,my);
+	mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
+	my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-27;
+	changed=true;
+	printf("x:%d, y:%d\n",mx,my);
 }
 
 void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& msg)
@@ -238,62 +235,33 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	printf("count:%d\n",count);
 	printf("peopleZ:%f\n",peopleZ);
 	printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
-	while(!ac->waitForServer(ros::Duration(5.0))){
-	ROS_INFO("Waiting for the move_base action server to come up");
-	}
-	goal.target_pose.header.frame_id = "/base_link";
-	goal.target_pose.pose.position.x = cos(angle) * peopleZ;
-	goal.target_pose.pose.position.y = sin(angle) * peopleZ;
-	printf("goalX:%f goalY:%f\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
-	goal.target_pose.pose.position.z=0;
+	goal.header.frame_id = "/base_link";
+	goal.pose.position.x = cos(angle) * peopleZ;
+	goal.pose.position.y = sin(angle) * peopleZ;
+	printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
+	goal.pose.position.z=0;
 	btQuaternion quat;
 	quat.setRPY(0.0, 0.0, 0.0);
-	tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-	goal.target_pose.header.stamp = ros::Time::now();
-
-    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-    {
-	   goal.target_pose.header.stamp = ros::Time::now();
-	   ROS_INFO("Sending goal");
-
-	   ac->sendGoal(goal);
-	   checkGoal_timer->Start(500);
-    }
-    else
-    {
-		ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
-	}
+	tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	goal.header.stamp = ros::Time::now();
+	goal_pub.publish(goal);
 	}
 	
 }
 void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 {
 	printf("down pressed\n");
-	while(!ac->waitForServer(ros::Duration(5.0))){
-	ROS_INFO("Waiting for the move_base action server to come up");
-	}
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, 0);
-	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-	    goal.target_pose.header.stamp=ros::Time::now();
-		goal.target_pose.header.frame_id = "/base_link";
-		goal.target_pose.pose.position.x = -1;
-	    goal.target_pose.pose.position.y = 0;
-	    goal.target_pose.pose.position.z = 0;
-	
-
-	   if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-	   {
-		   goal.target_pose.header.stamp = ros::Time::now();
-		   ROS_INFO("Sending goal");
-	
-		   ac->sendGoal(goal);
-		   checkGoal_timer->Start(500);
-	   }
-	   else
-		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	    goal.header.stamp=ros::Time::now();
+		goal.header.frame_id = "/base_link";
+		goal.pose.position.x = -1;
+	    goal.pose.position.y = 0;
+	    goal.pose.position.z = 0;
+		goal_pub.publish(goal);
 	}
 	else
 	{
@@ -345,31 +313,18 @@ void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 
 void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 {
-	printf("left pressed");
-	while(!ac->waitForServer(ros::Duration(5.0))){
-	ROS_INFO("Waiting for the move_base action server to come up");
-	}
+	printf("up pressed");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
 		quat.setRPY(0.0, 0.0, 0);
-		tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-		goal.target_pose.header.stamp=ros::Time::now();
-		goal.target_pose.header.frame_id = "/base_link";
-		goal.target_pose.pose.position.x = 1;
-		goal.target_pose.pose.position.y = 0;
-		goal.target_pose.pose.position.z = 0;
-
-
-		if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-		{
-			goal.target_pose.header.stamp = ros::Time::now();
-			ROS_INFO("Sending goal");
-			ac->sendGoal(goal);
-			checkGoal_timer->Start(500);
-		}
-		else
-			ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+		tf::quaternionTFToMsg(quat,goal.pose.orientation);
+		goal.header.stamp=ros::Time::now();
+		goal.header.frame_id = "/base_link";
+		goal.pose.position.x = 1;
+		goal.pose.position.y = 0;
+		goal.pose.position.z = 0;
+		goal_pub.publish(goal);
 	}
 	else
 	{
@@ -378,57 +333,25 @@ void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 }
 void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
 {
-	printf("left released\n");
+	printf("up released\n");
 	goalUp_timer->Stop();
-}
-
-void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
-{
-	actionlib::SimpleClientGoalState aux=ac->getState();
-	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
-	{
-		if(aux == actionlib::SimpleClientGoalState::SUCCEEDED)
-			ROS_INFO("He llegado correctamente al objetivo");
-        else
-            ROS_INFO("No he conseguido llegar al objetivo");
-        checkGoal_timer->Stop();
-	}
-	else
-	{
-		printf("pending edo active dago\n");
-	}
 }
 
 
 void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 {
-	printf("RecvLeftKey");
-	while(!ac->waitForServer(ros::Duration(5.0))){
-	ROS_INFO("Waiting for the move_base action server to come up");
-	}
+	printf("left pressed");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, pi/2);
-	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
-	
-	    goal.target_pose.header.stamp=ros::Time::now();
-		goal.target_pose.header.frame_id = "/base_link";
-		goal.target_pose.pose.position.x = 0;
-	    goal.target_pose.pose.position.y = 0;
-	    goal.target_pose.pose.position.z = 0;
-	
-	
-	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-	    {
-		   goal.target_pose.header.stamp = ros::Time::now();
-		   ROS_INFO("Sending goal");
-	
-		   ac->sendGoal(goal);
-		   checkGoal_timer->Start(500);
-	    }
-	    else
-			ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	    goal.header.stamp=ros::Time::now();
+		goal.header.frame_id = "/base_link";
+		goal.pose.position.x = 0;
+	    goal.pose.position.y = 0;
+	    goal.pose.position.z = 0;
+		goal_pub.publish(goal);
 	}
 	else
 	{
@@ -443,33 +366,19 @@ void telepresenceFrame::RecvLeftKeyRelease( wxCommandEvent& event )
 }
 void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 {
-	printf("RecvRightKey");
-	while(!ac->waitForServer(ros::Duration(5.0))){
-	ROS_INFO("Waiting for the move_base action server to come up");
-	}
+	printf("right pressed");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, -pi/2);
-	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
 	
-	    goal.target_pose.header.stamp=ros::Time::now();
-		goal.target_pose.header.frame_id = "/base_link";
-		goal.target_pose.pose.position.x = 0;
-	    goal.target_pose.pose.position.y = 0;
-	    goal.target_pose.pose.position.z = 0;
-	
-
-	    if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
-	    {
-		   goal.target_pose.header.stamp = ros::Time::now();
-		   ROS_INFO("Sending goal");
-
-		   ac->sendGoal(goal);
-		   checkGoal_timer->Start(500);
-	    }
-	    else
-		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+	    goal.header.stamp=ros::Time::now();
+		goal.header.frame_id = "/base_link";
+		goal.pose.position.x = 0;
+	    goal.pose.position.y = 0;
+	    goal.pose.position.z = 0;
+		goal_pub.publish(goal);
 	}
 	else
 	{
@@ -498,7 +407,6 @@ void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
 	m_pCameraView2->DrawCam(_IplImg2);
 	cv::Mat aux(_IplImg2);
 	cv_bridge::CvImage cv_ptr2;
-	//cv_ptr2->header=aux.header;
 	cv_ptr2.encoding=sensor_msgs::image_encodings::RGB8;
 	cv_ptr2.image=aux;
 
@@ -528,19 +436,9 @@ uint8[] data*/
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-
-	//cv::imshow(WINDOW, cv_ptr->image);
-	//image_pub_.publish(cv_ptr->toImageMsg());
-	//printf("imagecolorcallback: width:%d height:%d\n",cv_ptr->image.cols, cv_ptr->image.rows);
 	_IplImg=cv_ptr->image;
-	//IplImage aux=cv_ptr->image;
-	//_IplImg=aux;
-	////cvConvertImage(&aux, &_IplImg, CV_CVTIMG_FLIP);
-	////printf("imagecolorcallback2: width:%d height:%d\n",_IplImg.width, _IplImg.height);
-	//cvFlip(&aux,&_IplImg,1);
 	m_pCameraView->DrawCam(&_IplImg);
 
-  //ROS_INFO("I heard: [%d]", msg->data[0]);
 }
 
  wxThread::ExitCode telepresenceFrame::Entry()
@@ -558,12 +456,9 @@ uint8[] data*/
                 // need any pointer to access the m_data, m_processedData, m_dataCS
                 // variables... very nice!
 
-				//{
-				//wxCriticalSectionLocker lock(mutex);
 				IplImage *aux=cvQueryFrame( capture );
 				_IplImg2=aux;
 				cvConvertImage(aux,_IplImg2,CV_CVTIMG_SWAP_RB);
-				//}
 				wxCommandEvent evt(wxEVT_COMMAND_MYTHREAD_UPDATE, wxID_ANY);
 	            this->AddPendingEvent(evt);
 
@@ -598,20 +493,18 @@ telepresenceFrame::~telepresenceFrame()
 	m_button61->Disconnect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPress ), NULL, this );
 	m_button61->Disconnect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvRightKeyRelease ), NULL, this );
 	delete update_timer_;
-	delete checkGoal_timer;
 	delete goalUp_timer;
 	delete goalDown_timer;
 	delete goalRight_timer;
 	delete goalLeft_timer;
+	delete &goal;
 	delete m_pCameraView;
 	delete m_pCameraView2;
 	if(it_!=NULL)
 		delete it_;
-	if(ac!=NULL)
-		delete ac;
 	if (GetThread() && GetThread()->IsRunning())
 	{
 		printf("deleta thread\n");
 		GetThread()->Delete();
-	}//cv::destroyWindow(WINDOW);
+	}
 }
