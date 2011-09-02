@@ -229,7 +229,7 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 		printf("exception\n");
 	}
 	
-	float columnaX = (mx - 320.0);
+	float columnaX = -1*(mx - 320.0);
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
 	printf("count:%d\n",count);
@@ -298,7 +298,7 @@ void telepresenceFrame::sendGoalRight(wxTimerEvent& evt)
 	printf("sendGoalRight\n");
 	vel.linear.x = 0.0; // m/s
 	vel.linear.y = 0.0; // m/s
-	vel.angular.z = 0.5; // rad/s
+	vel.angular.z = -0.5; // rad/s
 	vel_pub.publish(vel);
 }
 
@@ -307,13 +307,13 @@ void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 	printf("sendGoalLeft\n");
 	vel.linear.x = 0.0; // m/s
 	vel.linear.y = 0.0; // m/s
-	vel.angular.z = -0.5; // rad/s
+	vel.angular.z = 0.5; // rad/s
 	vel_pub.publish(vel);
 }
 
 void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 {
-	printf("up pressed");
+	printf("up pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
@@ -340,7 +340,7 @@ void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
 
 void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 {
-	printf("left pressed");
+	printf("left pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
@@ -366,7 +366,7 @@ void telepresenceFrame::RecvLeftKeyRelease( wxCommandEvent& event )
 }
 void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 {
-	printf("right pressed");
+	printf("right pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
 		btQuaternion quat;
