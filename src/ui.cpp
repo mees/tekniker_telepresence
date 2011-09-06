@@ -139,6 +139,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);
 	goal_pub = nh_.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
+	client = nh_.serviceClient<tekniker_kinect::depth_server>("get_kinect_depth");
 	// Connect Events
 	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
 	m_button56->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvUpKeyRelease ), NULL, this );
@@ -185,67 +186,78 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 {
 	if(changed)
 	{
-	changed=false;
-	PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
-	float tmp=0;
-	int count=0;
-	float peopleZ=0;
-	try{
-		if((mx>5 && my>5) && (mx<635 &&my<475))
+		tekniker_kinect::depth_server srv;
+		srv.request.x = mx;
+		srv.request.y = my;
+		if (client.call(srv))
 		{
-			for (int a=my-5;a<my+5;a++)
-			{
-				for (int b=mx-5;b<mx+5;b++)
-				{
-					s=cvGet2D(PointCloud_image,a ,b);
-					if (s.val[0]!=s.val[0])
-					{
-						printf("s.val[0]!=s.val[0]\n");
-						s.val[0]  = 0;
-					}
-					else
-					{
-					tmp=tmp+s.val[0];
-					count++;
-					}
-				}
-			}
-			if (count==0)
-			{
-				peopleZ=0;
-			}
-			else
-			{
-				peopleZ=tmp/count;
-			}
+			ROS_INFO("DEpth: %ld", (long int)srv.response.depth);
 		}
 		else
 		{
-			printf("ertzetan klikatu dezu!\n");
-			peopleZ=0;
+			ROS_ERROR("Failed to call service get_kinect_depth");
 		}
+	//changed=false;
+	//PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
+	//float tmp=0;
+	//int count=0;
+	//float peopleZ=0;
+	//try{
+		//if((mx>5 && my>5) && (mx<635 &&my<475))
+		//{
+			//for (int a=my-5;a<my+5;a++)
+			//{
+				//for (int b=mx-5;b<mx+5;b++)
+				//{
+					//s=cvGet2D(PointCloud_image,a ,b);
+					//if (s.val[0]!=s.val[0])
+					//{
+						//printf("s.val[0]!=s.val[0]\n");
+						//s.val[0]  = 0;
+					//}
+					//else
+					//{
+					//tmp=tmp+s.val[0];
+					//count++;
+					//}
+				//}
+			//}
+			//if (count==0)
+			//{
+				//peopleZ=0;
+			//}
+			//else
+			//{
+				//peopleZ=tmp/count;
+			//}
+		//}
+		//else
+		//{
+			//printf("ertzetan klikatu dezu!\n");
+			//peopleZ=0;
+		//}
 		
-	}catch(cv::Exception& e)
-	{
-		printf("exception\n");
-	}
+	//}catch(cv::Exception& e)
+	//{
+		//printf("exception\n");
+	//}
 	
-	float columnaX = -1*(mx - 320.0);
-	float angle = asin((columnaX/320.0) * SINFOV);
-	printf("angle:%f\n",angle);
-	printf("count:%d\n",count);
-	printf("peopleZ:%f\n",peopleZ);
-	printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
-	goal.header.frame_id = "/base_link";
-	goal.pose.position.x = cos(angle) * peopleZ;
-	goal.pose.position.y = sin(angle) * peopleZ;
-	printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
-	goal.pose.position.z=0;
-	btQuaternion quat;
-	quat.setRPY(0.0, 0.0, 0.0);
-	tf::quaternionTFToMsg(quat,goal.pose.orientation);
-	goal.header.stamp = ros::Time::now();
-	goal_pub.publish(goal);
+	//float columnaX = -1*(mx - 320.0);
+	//float angle = asin((columnaX/320.0) * SINFOV);
+	//printf("angle:%f\n",angle);
+	//printf("count:%d\n",count);
+	//printf("peopleZ:%f\n",peopleZ);
+	//printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
+	//goal.header.frame_id = "/base_link";
+	//goal.pose.position.x = cos(angle) * peopleZ;
+	//goal.pose.position.y = sin(angle) * peopleZ;
+	//printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
+	//goal.pose.position.z=0;
+	//btQuaternion quat;
+	//quat.setRPY(0.0, 0.0, 0.0);
+	//tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	//goal.header.stamp = ros::Time::now();
+	//goal_pub.publish(goal);
 	}
 	
 }
