@@ -136,6 +136,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	image_depth = it_->subscribe("/camera/depth/image", 1, &telepresenceFrame::imageDepth_callback, this);
+	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);
 	goal_pub = nh_.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 	// Connect Events
@@ -248,6 +249,12 @@ void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& ms
 	}
 	
 }
+
+void telepresenceFrame::status_callback(const segway_rmp::Status& msg)
+{
+	printf("pb:%d ui:%d\n", msg.pb_battery, msg.ui_battery);
+}
+
 void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 {
 	printf("down pressed\n");

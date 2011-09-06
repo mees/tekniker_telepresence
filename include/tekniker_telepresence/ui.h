@@ -25,6 +25,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/Twist.h>
+#include "segway_rmp/Status.h"
 
 
 #include <wx/bitmap.h>
@@ -62,6 +63,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		ros::NodeHandle nh_;
 		image_transport::Subscriber image_color;
 		image_transport::Subscriber image_depth;
+		ros::Subscriber status;
 		ros::Publisher my_webcam;
 		ros::Publisher vel_pub;
 		ros::Publisher goal_pub;
@@ -114,6 +116,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void OnClose(wxCloseEvent& evt);
 		void imageColor_callback(const sensor_msgs::ImageConstPtr& msg);
 		void imageDepth_callback(const sensor_msgs::ImageConstPtr& msg);
+		void status_callback(const segway_rmp::Status& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
 		
