@@ -26,7 +26,6 @@
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/Twist.h>
 #include "segway_rmp/Status.h"
-
 #include "tekniker_kinect/depth_server.h"
 
 
@@ -64,7 +63,6 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 	private:
 		ros::NodeHandle nh_;
 		image_transport::Subscriber image_color;
-		image_transport::Subscriber image_depth;
 		ros::Subscriber status;
 		ros::ServiceClient client;
 		ros::Publisher my_webcam;

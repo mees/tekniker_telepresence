@@ -135,7 +135,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
-	image_depth = it_->subscribe("/camera/depth/image", 1, &telepresenceFrame::imageDepth_callback, this);
 	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);
 	goal_pub = nh_.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
@@ -173,94 +172,40 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 {
-	printf("x1:%d y1:%d\n",this->GetScreenPosition().x,this->GetScreenPosition().y);
-	printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
-	printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
+	//printf("x1:%d y1:%d\n",this->GetScreenPosition().x,this->GetScreenPosition().y);
+	//printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
+	//printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
 	mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
 	my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-27;
-	changed=true;
 	printf("x:%d, y:%d\n",mx,my);
+	tekniker_kinect::depth_server srv;
+	srv.request.x = mx;
+	srv.request.y = my;
+	if (client.call(srv))
+	{
+		ROS_INFO("Depth: %ld", (long int)srv.response.depth);
+	}
+	else
+	{
+		ROS_ERROR("Failed to call service get_kinect_depth");
+	}
+	float columnaX = -1*(mx - 320.0);
+	float angle = asin((columnaX/320.0) * SINFOV);
+	printf("angle:%f\n",angle);
+	printf("peopleZ:%f\n",srv.response.depth);
+	goal.header.frame_id = "/base_link";
+	goal.pose.position.x = cos(angle) * srv.response.depth;
+	goal.pose.position.y = sin(angle) * srv.response.depth;
+	printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
+	goal.pose.position.z=0;
+	btQuaternion quat;
+	quat.setRPY(0.0, 0.0, 0.0);
+	tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	goal.header.stamp = ros::Time::now();
+	goal_pub.publish(goal);
 }
 
-void telepresenceFrame::imageDepth_callback(const sensor_msgs::ImageConstPtr& msg)
-{
-	if(changed)
-	{
-		tekniker_kinect::depth_server srv;
-		srv.request.x = mx;
-		srv.request.y = my;
-		if (client.call(srv))
-		{
-			ROS_INFO("DEpth: %ld", (long int)srv.response.depth);
-		}
-		else
-		{
-			ROS_ERROR("Failed to call service get_kinect_depth");
-		}
-	//changed=false;
-	//PointCloud_image = bridge.imgMsgToCv(msg, msg->encoding.c_str());
-	//float tmp=0;
-	//int count=0;
-	//float peopleZ=0;
-	//try{
-		//if((mx>5 && my>5) && (mx<635 &&my<475))
-		//{
-			//for (int a=my-5;a<my+5;a++)
-			//{
-				//for (int b=mx-5;b<mx+5;b++)
-				//{
-					//s=cvGet2D(PointCloud_image,a ,b);
-					//if (s.val[0]!=s.val[0])
-					//{
-						//printf("s.val[0]!=s.val[0]\n");
-						//s.val[0]  = 0;
-					//}
-					//else
-					//{
-					//tmp=tmp+s.val[0];
-					//count++;
-					//}
-				//}
-			//}
-			//if (count==0)
-			//{
-				//peopleZ=0;
-			//}
-			//else
-			//{
-				//peopleZ=tmp/count;
-			//}
-		//}
-		//else
-		//{
-			//printf("ertzetan klikatu dezu!\n");
-			//peopleZ=0;
-		//}
-		
-	//}catch(cv::Exception& e)
-	//{
-		//printf("exception\n");
-	//}
-	
-	//float columnaX = -1*(mx - 320.0);
-	//float angle = asin((columnaX/320.0) * SINFOV);
-	//printf("angle:%f\n",angle);
-	//printf("count:%d\n",count);
-	//printf("peopleZ:%f\n",peopleZ);
-	//printf("data:%d, align:%d, width:%d, height:%d, depth:%d \n",PointCloud_image->imageData[200], PointCloud_image->align, PointCloud_image->width, PointCloud_image->height, PointCloud_image->depth);
-	//goal.header.frame_id = "/base_link";
-	//goal.pose.position.x = cos(angle) * peopleZ;
-	//goal.pose.position.y = sin(angle) * peopleZ;
-	//printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
-	//goal.pose.position.z=0;
-	//btQuaternion quat;
-	//quat.setRPY(0.0, 0.0, 0.0);
-	//tf::quaternionTFToMsg(quat,goal.pose.orientation);
-	//goal.header.stamp = ros::Time::now();
-	//goal_pub.publish(goal);
-	}
-	
-}
+
 
 void telepresenceFrame::status_callback(const segway_rmp::Status& msg)
 {
