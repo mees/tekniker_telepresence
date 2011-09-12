@@ -22,6 +22,7 @@
   <depend package="audio_capture"/>
   <depend package="segway_rmp"/>
   <depend package="tekniker_kinect"/>
+  <depend package="joy"/>
 
   <platform os="ubuntu" version="10.04"/>
   <platform os="ubuntu" version="10.10"/>

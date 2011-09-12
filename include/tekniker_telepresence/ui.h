@@ -27,7 +27,7 @@
 #include <geometry_msgs/Twist.h>
 #include "segway_rmp/Status.h"
 #include "tekniker_kinect/depth_server.h"
-
+#include <joy/Joy.h>
 
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -68,6 +68,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		ros::Publisher my_webcam;
 		ros::Publisher vel_pub;
 		ros::Publisher goal_pub;
+		ros::Subscriber joy_sub_;
 		image_transport::Publisher image_pub_;
 		image_transport::ImageTransport *it_;
 		wxTimer* update_timer_;
@@ -79,6 +80,8 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxGauge* prgBar;
 		geometry_msgs::Twist vel;
 		sensor_msgs::CvBridge bridge;
+		int linear_, angular_;
+		double l_scale_, a_scale_;
 		
 
 	
@@ -120,6 +123,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void status_callback(const segway_rmp::Status& msg);
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
+		void joyCallback(const joy::Joy::ConstPtr& joy);
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKeyPress(wxCommandEvent& event);

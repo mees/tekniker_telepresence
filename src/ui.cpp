@@ -131,7 +131,13 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	mx=0;
 	my=0;
 
+	linear_=1;
+	angular_=2;
 	it_=new image_transport::ImageTransport(nh_);
+	nh_.param("axis_linear", linear_, linear_);
+	nh_.param("axis_angular", angular_, angular_);
+	nh_.param("scale_angular", a_scale_, a_scale_);
+	nh_.param("scale_linear", l_scale_, l_scale_);
 	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
@@ -139,6 +145,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	goal_pub = nh_.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 1);
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 	client = nh_.serviceClient<tekniker_kinect::depth_server>("get_kinect_depth");
+	joy_sub_ = nh_.subscribe<joy::Joy>("joy", 10, &telepresenceFrame::joyCallback, this);
+	
 	// Connect Events
 	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
 	m_button56->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvUpKeyRelease ), NULL, this );
@@ -441,6 +449,86 @@ uint8[] data*/
             return (wxThread::ExitCode)0;
         }
 
+void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
+{
+	vel.linear.y = 0.0; // m/s
+	float vel_min=0.1;
+	float vel_max=0.4;
+	float vel_ang_min=0.15;
+	float vel_ang_max=0.7;
+	double joystick_ang=a_scale_*joy->axes[angular_];
+	double joystick_vel=l_scale_*joy->axes[linear_];
+	if(joystick_vel>0)
+	{
+		if(joystick_vel<vel_min)
+		{
+			vel.linear.x=vel_min;
+			ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+		}
+		if (joystick_vel>vel_min)
+		{
+		vel.linear.x=vel_max*(joystick_vel/2);
+		ROS_INFO("joystick_vel>vel_min");
+		}
+	}
+	else if(joystick_vel==0)
+	{
+		vel.linear.x=0;
+		ROS_INFO("joystick_vel==0");
+	}
+	else if(joystick_vel<0)
+	{
+		if(joystick_vel>(-1)*vel_min)
+		{
+			vel.linear.x=vel_min;
+			ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+		}
+		if(joystick_vel<(-1)*vel_min)
+		{
+			vel.linear.x=vel_max*(joystick_vel/2);
+			ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+		}
+	}
+	
+	
+	if(joystick_ang>0)
+	{
+		if(joystick_ang<vel_ang_min)
+		{
+			vel.angular.z=vel_ang_min;
+			ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
+		}
+
+		if (joystick_ang>vel_ang_min)
+		{
+		vel.angular.z=vel_ang_max*(joystick_ang/2);
+		ROS_INFO("joystick_ang>vel_ang_min");
+		}
+	} 
+	else if (joystick_ang==0)
+	{
+		vel.angular.z=0;
+		ROS_INFO("joystick_ang==0");
+	}
+	else if (joystick_ang<0)
+	{
+		if(joystick_ang>(-1)*vel_ang_min)
+		{
+			vel.angular.z=vel_ang_min;
+			ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
+		}
+		if(joystick_ang<(-1)*vel_ang_min)
+		{
+			vel.angular.z=vel_ang_max*(joystick_ang/2);
+			ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+		}
+	}
+
+
+	vel_pub.publish(vel);
+	ROS_INFO("joystick angular %f, lineal %f",joystick_ang, joystick_vel);
+	ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
+}
 
 telepresenceFrame::~telepresenceFrame()
 {
