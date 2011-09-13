@@ -32,6 +32,11 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
 	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	controller_checkbox = new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
+	controller_checkbox->SetValue(false);
+	controller_checkbox->Disable();
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("PS3 controller activated?"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	int width, height;
 	this->GetClientSize(&width, &height);
 	//printf("width:%d,height:%d\n",width,height);
@@ -109,13 +114,14 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
 	prgBar->SetValue(70);
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
-	//m_staticText2->Wrap( -1 );
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
+	bSizer39->Add( controller_checkbox, 0, wxLEFT|wxTOP|wxBOTTOM, 5 );
+	bSizer39->Add( m_staticText3, 0, wxRIGHT|wxTOP|wxBOTTOM, 8 );
 	bSizer40->Add( m_staticText2, 0, wxALL, 5 );
 	bSizer40->Add( prgBar, 0, wxALL, 5 );
 	
@@ -469,6 +475,7 @@ void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 			ROS_INFO("PS3 controller activated! begin");
 			ps3joy_activated=true;
 			qw++;
+			controller_checkbox->SetValue(true);
 		}
 		else
 		{
@@ -481,6 +488,7 @@ void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 				ps3joy_activated=true;
 				ROS_INFO("PS3 controller activated!");
 				begin = ros::Time::now();
+				controller_checkbox->SetValue(true);
 			}
 		}
 	}
@@ -495,6 +503,7 @@ void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 		ps3joy_activated=false;
 		ROS_INFO("PS3 controller desactivated!");
 		begin2 = ros::Time::now();
+		controller_checkbox->SetValue(false);
 		}
 	}
 	if (ps3joy_activated==true)

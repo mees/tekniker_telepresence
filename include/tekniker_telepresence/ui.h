@@ -99,6 +99,8 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxButton* m_button58;
 		wxStaticText* m_staticText2;
 		wxCheckBox* m_checkbox;
+		wxCheckBox* controller_checkbox;
+		wxStaticText* m_staticText3;
 		int m_nWidth;
 		int m_nHeight;
 		CCamView*	m_pCameraView;
