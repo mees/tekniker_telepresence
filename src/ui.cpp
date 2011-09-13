@@ -17,6 +17,7 @@ END_EVENT_TABLE()
 
 //tell the action client that we want to spin a thread by default
 int a =0;
+int qw=0;
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
@@ -146,6 +147,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 10);
 	client = nh_.serviceClient<tekniker_kinect::depth_server>("get_kinect_depth");
 	joy_sub_ = nh_.subscribe<joy::Joy>("joy", 10, &telepresenceFrame::joyCallback, this);
+	ps3joy_activated=false;
 	
 	// Connect Events
 	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
@@ -458,76 +460,115 @@ void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 	float vel_ang_max=0.7;
 	double joystick_ang=a_scale_*joy->axes[angular_];
 	double joystick_vel=l_scale_*joy->axes[linear_];
-	if(joystick_vel>0)
+	if(ps3joy_activated==false && joy->buttons[15]==1)
 	{
-		if(joystick_vel<vel_min)
+		if(qw==0)// first time
 		{
-			vel.linear.x=vel_min;
-			ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+			begin = ros::Time::now();
+			ROS_INFO("begin %f",begin.toSec());
+			ROS_INFO("PS3 controller activated! begin");
+			ps3joy_activated=true;
+			qw++;
 		}
-		if (joystick_vel>vel_min)
+		else
 		{
-		vel.linear.x=vel_max*(joystick_vel/2);
-		ROS_INFO("joystick_vel>vel_min");
+			end2 = ros::Time::now();
+			ROS_INFO("end2 %f",end2.toSec());
+			ros::Duration e=end2-begin2;
+			ROS_INFO("kenketa2: %f",e.toSec());
+			if(e.toSec()>2.0)
+			{
+				ps3joy_activated=true;
+				ROS_INFO("PS3 controller activated!");
+				begin = ros::Time::now();
+			}
 		}
 	}
-	else if(joystick_vel==0)
+	else if(ps3joy_activated==true && joy->buttons[15]==1)
 	{
-		vel.linear.x=0;
-		ROS_INFO("joystick_vel==0");
-	}
-	else if(joystick_vel<0)
-	{
-		if(joystick_vel>(-1)*vel_min)
+		end = ros::Time::now();
+		ROS_INFO("end %f",end.toSec());
+		ros::Duration d=end-begin;
+		ROS_INFO("kenketa: %f",d.toSec());
+		if(d.toSec()>2.0)
 		{
-			vel.linear.x=vel_min;
-			ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+		ps3joy_activated=false;
+		ROS_INFO("PS3 controller desactivated!");
+		begin2 = ros::Time::now();
 		}
-		if(joystick_vel<(-1)*vel_min)
+	}
+	if (ps3joy_activated==true)
+	{
+		if(joystick_vel>0)
 		{
+			if(joystick_vel<vel_min)
+			{
+				vel.linear.x=vel_min;
+				ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+			}
+			if (joystick_vel>vel_min)
+			{
 			vel.linear.x=vel_max*(joystick_vel/2);
-			ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+			ROS_INFO("joystick_vel>vel_min");
+			}
 		}
-	}
+		else if(joystick_vel==0)
+		{
+			vel.linear.x=0;
+			ROS_INFO("joystick_vel==0");
+		}
+		else if(joystick_vel<0)
+		{
+			if(joystick_vel>(-1)*vel_min)
+			{
+				vel.linear.x=vel_min;
+				ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+			}
+			if(joystick_vel<(-1)*vel_min)
+			{
+				vel.linear.x=vel_max*(joystick_vel/2);
+				ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+			}
+		}
+		
+		
+		if(joystick_ang>0)
+		{
+			if(joystick_ang<vel_ang_min)
+			{
+				vel.angular.z=vel_ang_min;
+				ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
+			}
 	
-	
-	if(joystick_ang>0)
-	{
-		if(joystick_ang<vel_ang_min)
-		{
-			vel.angular.z=vel_ang_min;
-			ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
-		}
-
-		if (joystick_ang>vel_ang_min)
-		{
-		vel.angular.z=vel_ang_max*(joystick_ang/2);
-		ROS_INFO("joystick_ang>vel_ang_min");
-		}
-	} 
-	else if (joystick_ang==0)
-	{
-		vel.angular.z=0;
-		ROS_INFO("joystick_ang==0");
-	}
-	else if (joystick_ang<0)
-	{
-		if(joystick_ang>(-1)*vel_ang_min)
-		{
-			vel.angular.z=vel_ang_min;
-			ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
-		}
-		if(joystick_ang<(-1)*vel_ang_min)
-		{
+			if (joystick_ang>vel_ang_min)
+			{
 			vel.angular.z=vel_ang_max*(joystick_ang/2);
-			ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+			ROS_INFO("joystick_ang>vel_ang_min");
+			}
+		} 
+		else if (joystick_ang==0)
+		{
+			vel.angular.z=0;
+			ROS_INFO("joystick_ang==0");
 		}
+		else if (joystick_ang<0)
+		{
+			if(joystick_ang>(-1)*vel_ang_min)
+			{
+				vel.angular.z=vel_ang_min;
+				ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
+			}
+			if(joystick_ang<(-1)*vel_ang_min)
+			{
+				vel.angular.z=vel_ang_max*(joystick_ang/2);
+				ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+			}
+		}
+
+		vel_pub.publish(vel);
+		ROS_INFO("joystick angular %f, lineal %f",joystick_ang, joystick_vel);
+		ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
 	}
-
-
-	vel_pub.publish(vel);
-	ROS_INFO("joystick angular %f, lineal %f",joystick_ang, joystick_vel);
-	ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
 }
 
 telepresenceFrame::~telepresenceFrame()

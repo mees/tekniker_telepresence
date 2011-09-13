@@ -82,6 +82,11 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		sensor_msgs::CvBridge bridge;
 		int linear_, angular_;
 		double l_scale_, a_scale_;
+		bool ps3joy_activated;
+		ros::Time begin;
+		ros::Time end;
+		ros::Time begin2;
+		ros::Time end2;
 		
 
 	
