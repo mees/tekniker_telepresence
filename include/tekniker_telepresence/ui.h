@@ -83,10 +83,15 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		int linear_, angular_;
 		double l_scale_, a_scale_;
 		bool ps3joy_activated;
+		bool acelerometer_activated;
 		ros::Time begin;
 		ros::Time end;
 		ros::Time begin2;
 		ros::Time end2;
+		ros::Time begin_acel;
+		ros::Time end_acel;
+		ros::Time begin2_acel;
+		ros::Time end2_acel;
 		
 
 	
@@ -101,6 +106,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxCheckBox* m_checkbox;
 		wxCheckBox* controller_checkbox;
 		wxStaticText* m_staticText3;
+		wxStaticText* m_staticText4;
 		int m_nWidth;
 		int m_nHeight;
 		CCamView*	m_pCameraView;
@@ -131,6 +137,9 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void coordX_callback(const std_msgs::Int32ConstPtr& msg);
 		void coordY_callback(const std_msgs::Int32ConstPtr& msg);
 		void joyCallback(const joy::Joy::ConstPtr& joy);
+		void sendJoystickVel(double joystick_vel, double joystick_ang);
+		void timeOnButtonPress(bool &boolean_var, bool &boolean_var2,int buttonNumber, const joy::Joy::ConstPtr& joy);
+		void changeLabel(int buttonNumber, bool var);
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKeyPress(wxCommandEvent& event);

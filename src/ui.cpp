@@ -18,38 +18,36 @@ END_EVENT_TABLE()
 //tell the action client that we want to spin a thread by default
 int a =0;
 int qw=0;
+int qq=0;
+float vel_min=0.1;
+float vel_max=0.4;
+float vel_ang_min=0.15;
+float vel_ang_max=0.7;
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	//ShowFullScreen(true);
 	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
-
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
-
 	//bSizer1->SetMinSize( wxSize( 900,700 ) );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
-
 	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
 	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	controller_checkbox = new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
-	controller_checkbox->SetValue(false);
-	controller_checkbox->Disable();
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("PS3 controller activated?"), wxDefaultPosition, wxDefaultSize, 0 );
+	//controller_checkbox = new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
+	//controller_checkbox->SetValue(false);
+	//controller_checkbox->Disable();
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Joystick: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Acelerometer: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	int width, height;
 	this->GetClientSize(&width, &height);
-	//printf("width:%d,height:%d\n",width,height);
-
 	m_pCameraView = new CCamView(this, wxPoint(5,15), wxSize(640, 480));
-
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
-	// display my stuff
 	SetAutoLayout( TRUE );
-	/////////////////////////////////////////////////////
 	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
 	bSizer4->Add( m_pCameraView2, 0,wxALIGN_RIGHT, 0);
-
 	if (wxThreadHelper::Create(wxTHREAD_DETACHED) != wxTHREAD_NO_ERROR)
 	{
 		wxLogError(wxT("Could not create the worker thread!"));
@@ -61,67 +59,46 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 		return;
 	}
 	bSizer1->Add( bSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
-
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
-
 	m_button56 = new wxButton( this, wxID_ANY, wxT("Up"), wxDefaultPosition, wxDefaultSize, 0 );
-
 	bSizer32->Add( m_button56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxVERTICAL );
-
 	wxBoxSizer* bSizer37;
 	bSizer37 = new wxBoxSizer( wxVERTICAL );
-
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
-
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
-
 	m_button57 = new wxButton( this, wxID_ANY, wxT("Left"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer35->Add( m_button57, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
 	bSizer38->Add( bSizer35, 1, wxEXPAND, 5 );
-
 	m_button61 = new wxButton( this, wxID_ANY, wxT("Right"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer38->Add( m_button61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
 	bSizer37->Add( bSizer38, 1, wxEXPAND, 5 );
-
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxVERTICAL );
-
 	m_button58 = new wxButton( this, wxID_ANY, wxT("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer36->Add( m_button58, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
 	bSizer37->Add( bSizer36, 1, wxEXPAND, 5 );
-
 	bSizer33->Add( bSizer37, 1, wxEXPAND, 5 );
-
 	bSizer32->Add( bSizer33, 1, wxEXPAND, 5 );
-
 	bSizer28->Add( bSizer32, 0, wxEXPAND, 5 );
-
 	wxBoxSizer* bSizer39;
 	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
-
 	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
 	prgBar->SetValue(70);
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
-	
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
-	bSizer39->Add( controller_checkbox, 0, wxLEFT|wxTOP|wxBOTTOM, 5 );
-	bSizer39->Add( m_staticText3, 0, wxRIGHT|wxTOP|wxBOTTOM, 8 );
+	//bSizer39->Add( controller_checkbox, 0, wxLEFT|wxTOP|wxBOTTOM, 5 );
+	bSizer39->Add( m_staticText3, 0, wxALL, 5 );
+	bSizer39->Add( m_staticText4, 0, wxALL, 5 );
 	bSizer40->Add( m_staticText2, 0, wxALL, 5 );
 	bSizer40->Add( prgBar, 0, wxALL, 5 );
 	
@@ -154,6 +131,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	client = nh_.serviceClient<tekniker_kinect::depth_server>("get_kinect_depth");
 	joy_sub_ = nh_.subscribe<joy::Joy>("joy", 10, &telepresenceFrame::joyCallback, this);
 	ps3joy_activated=false;
+	acelerometer_activated=false;
 	
 	// Connect Events
 	m_button56->Connect( wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvUpKeyPress ), NULL, this );
@@ -457,126 +435,163 @@ uint8[] data*/
             return (wxThread::ExitCode)0;
         }
 
-void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
+void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang)
 {
 	vel.linear.y = 0.0; // m/s
-	float vel_min=0.1;
-	float vel_max=0.4;
-	float vel_ang_min=0.15;
-	float vel_ang_max=0.7;
-	double joystick_ang=a_scale_*joy->axes[angular_];
-	double joystick_vel=l_scale_*joy->axes[linear_];
-	if(ps3joy_activated==false && joy->buttons[15]==1)
+	if(joystick_vel>0)
+	{
+		if(joystick_vel<vel_min)
+		{
+			vel.linear.x=vel_min;
+			ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+		}
+		if (joystick_vel>vel_min)
+		{
+		vel.linear.x=vel_max*(joystick_vel/2);
+		ROS_INFO("joystick_vel>vel_min");
+		}
+	}
+	else if(joystick_vel==0)
+	{
+		vel.linear.x=0;
+		ROS_INFO("joystick_vel==0");
+	}
+	else if(joystick_vel<0)
+	{
+		if(joystick_vel>(-1)*vel_min)
+		{
+			vel.linear.x=vel_min;
+			ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+		}
+		if(joystick_vel<(-1)*vel_min)
+		{
+			vel.linear.x=vel_max*(joystick_vel/2);
+			ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+		}
+	}
+	
+	
+	if(joystick_ang>0)
+	{
+		if(joystick_ang<vel_ang_min)
+		{
+			vel.angular.z=vel_ang_min;
+			ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
+		}
+
+		if (joystick_ang>vel_ang_min)
+		{
+		vel.angular.z=vel_ang_max*(joystick_ang/2);
+		ROS_INFO("joystick_ang>vel_ang_min");
+		}
+	} 
+	else if (joystick_ang==0)
+	{
+		vel.angular.z=0;
+		ROS_INFO("joystick_ang==0");
+	}
+	else if (joystick_ang<0)
+	{
+		if(joystick_ang>(-1)*vel_ang_min)
+		{
+			vel.angular.z=vel_ang_min;
+			ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
+		}
+		if(joystick_ang<(-1)*vel_ang_min)
+		{
+			vel.angular.z=vel_ang_max*(joystick_ang/2);
+			ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+		}
+	}
+
+	vel_pub.publish(vel);
+	ROS_INFO("joystick angular %f, lineal %f",joystick_ang, joystick_vel);
+	ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
+
+}
+void telepresenceFrame::changeLabel(int buttonNumber, bool var)
+{
+			if(buttonNumber==15)
+			{
+				if(var==true)
+				{
+					m_staticText3->SetLabel(wxT("Joystick: ON"));	
+				}
+				else
+				{
+					m_staticText3->SetLabel(wxT("Joystick: OFF"));	
+				}		
+			}else if(buttonNumber==12)
+			{
+				if(var==true)
+				{
+					m_staticText4->SetLabel(wxT("Acelerometer: ON"));			
+				}
+				else
+				{
+					m_staticText4->SetLabel(wxT("Acelerometer: OFF"));
+				}			
+			}
+}
+
+void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, int buttonNumber, const joy::Joy::ConstPtr& joy)
+{
+	if (boolean_var==false && joy->buttons[buttonNumber]==1)
 	{
 		if(qw==0)// first time
 		{
 			begin = ros::Time::now();
-			ROS_INFO("begin %f",begin.toSec());
-			ROS_INFO("PS3 controller activated! begin");
-			ps3joy_activated=true;
+			//ROS_INFO("begin %f",begin.toSec());
+			//ROS_INFO("PS3 controller activated! begin");
+			boolean_var=true;
 			qw++;
-			controller_checkbox->SetValue(true);
+			changeLabel(buttonNumber, true);
 		}
 		else
 		{
 			end2 = ros::Time::now();
-			ROS_INFO("end2 %f",end2.toSec());
+			//ROS_INFO("end2 %f",end2.toSec());
 			ros::Duration e=end2-begin2;
-			ROS_INFO("kenketa2: %f",e.toSec());
-			if(e.toSec()>2.0)
+			//ROS_INFO("kenketa2: %f",e.toSec());
+			if(e.toSec()>2.0 && boolean_var2==false)
 			{
-				ps3joy_activated=true;
-				ROS_INFO("PS3 controller activated!");
+				boolean_var=true;
+				//ROS_INFO("PS3 controller activated!");
 				begin = ros::Time::now();
-				controller_checkbox->SetValue(true);
+				changeLabel(buttonNumber, true); //akatsa, bi aldagaik true badira!
 			}
+
 		}
 	}
-	else if(ps3joy_activated==true && joy->buttons[15]==1)
+	else if(boolean_var==true && joy->buttons[buttonNumber]==1)
 	{
 		end = ros::Time::now();
-		ROS_INFO("end %f",end.toSec());
+		//ROS_INFO("end %f",end.toSec());
 		ros::Duration d=end-begin;
-		ROS_INFO("kenketa: %f",d.toSec());
+		//ROS_INFO("kenketa: %f",d.toSec());
 		if(d.toSec()>2.0)
 		{
-		ps3joy_activated=false;
-		ROS_INFO("PS3 controller desactivated!");
-		begin2 = ros::Time::now();
-		controller_checkbox->SetValue(false);
+			boolean_var=false;
+			//ROS_INFO("PS3 controller desactivated!");
+			begin2 = ros::Time::now();
+			changeLabel(buttonNumber, false);
 		}
 	}
-	if (ps3joy_activated==true)
+}
+void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
+{
+	double joystick_ang=a_scale_*joy->axes[angular_];
+	double joystick_vel=l_scale_*joy->axes[linear_];
+	timeOnButtonPress(ps3joy_activated, acelerometer_activated, 15, joy);
+	timeOnButtonPress(acelerometer_activated, ps3joy_activated, 12, joy);
+	if(acelerometer_activated==true && ps3joy_activated==false)//activate to use acelerometer
 	{
-		if(joystick_vel>0)
-		{
-			if(joystick_vel<vel_min)
-			{
-				vel.linear.x=vel_min;
-				ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
-			}
-			if (joystick_vel>vel_min)
-			{
-			vel.linear.x=vel_max*(joystick_vel/2);
-			ROS_INFO("joystick_vel>vel_min");
-			}
-		}
-		else if(joystick_vel==0)
-		{
-			vel.linear.x=0;
-			ROS_INFO("joystick_vel==0");
-		}
-		else if(joystick_vel<0)
-		{
-			if(joystick_vel>(-1)*vel_min)
-			{
-				vel.linear.x=vel_min;
-				ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
-			}
-			if(joystick_vel<(-1)*vel_min)
-			{
-				vel.linear.x=vel_max*(joystick_vel/2);
-				ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
-			}
-		}
-		
-		
-		if(joystick_ang>0)
-		{
-			if(joystick_ang<vel_ang_min)
-			{
-				vel.angular.z=vel_ang_min;
-				ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
-			}
-	
-			if (joystick_ang>vel_ang_min)
-			{
-			vel.angular.z=vel_ang_max*(joystick_ang/2);
-			ROS_INFO("joystick_ang>vel_ang_min");
-			}
-		} 
-		else if (joystick_ang==0)
-		{
-			vel.angular.z=0;
-			ROS_INFO("joystick_ang==0");
-		}
-		else if (joystick_ang<0)
-		{
-			if(joystick_ang>(-1)*vel_ang_min)
-			{
-				vel.angular.z=vel_ang_min;
-				ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
-			}
-			if(joystick_ang<(-1)*vel_ang_min)
-			{
-				vel.angular.z=vel_ang_max*(joystick_ang/2);
-				ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
-			}
-		}
-
-		vel_pub.publish(vel);
-		ROS_INFO("joystick angular %f, lineal %f",joystick_ang, joystick_vel);
-		ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
+		ROS_INFO("Right-Left:%f Forward-Backward:%f",joy->axes[16], joy->axes[17]);
+		sendJoystickVel(20*joy->axes[17], -20*joy->axes[16]);
+	}
+	if(acelerometer_activated==false && ps3joy_activated==true)
+	{
+		sendJoystickVel(joystick_vel, joystick_ang);
 	}
 }
 
