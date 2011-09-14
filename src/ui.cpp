@@ -63,7 +63,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	m_button56 = new wxButton( this, wxID_ANY, wxT("Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button56 = new wxButton( this, wxID_ANY, wxT("Forward"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer32->Add( m_button56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxVERTICAL );
@@ -73,15 +73,15 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
-	m_button57 = new wxButton( this, wxID_ANY, wxT("Left"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button57 = new wxButton( this, wxID_ANY, wxT("Turn Left"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer35->Add( m_button57, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	bSizer38->Add( bSizer35, 1, wxEXPAND, 5 );
-	m_button61 = new wxButton( this, wxID_ANY, wxT("Right"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button61 = new wxButton( this, wxID_ANY, wxT("Turn Right"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer38->Add( m_button61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	bSizer37->Add( bSizer38, 1, wxEXPAND, 5 );
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxVERTICAL );
-	m_button58 = new wxButton( this, wxID_ANY, wxT("Down"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button58 = new wxButton( this, wxID_ANY, wxT("Backward"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer36->Add( m_button58, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	bSizer37->Add( bSizer36, 1, wxEXPAND, 5 );
 	bSizer33->Add( bSizer37, 1, wxEXPAND, 5 );
