@@ -23,7 +23,6 @@ float vel_ang_min=0.15;
 float vel_ang_max=0.7;
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
-	//ShowFullScreen(true);
 	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -121,7 +120,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	nh_.param("axis_angular", angular_, angular_);
 	nh_.param("scale_angular", a_scale_, a_scale_);
 	nh_.param("scale_linear", l_scale_, l_scale_);
-	//image_pub_ = it_->advertise("out", 1);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);
@@ -166,9 +164,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 
 void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 {
-	//printf("x1:%d y1:%d\n",this->GetScreenPosition().x,this->GetScreenPosition().y);
-	//printf("xx:%d yy:%d\n",wxGetMousePosition().x,wxGetMousePosition().y);
-	//printf("xxx:%d yyy:%d\n",m_pCameraView->GetPosition().x, m_pCameraView->GetPosition().y);
 	mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
 	my = wxGetMousePosition().y - this->GetScreenPosition().y - m_pCameraView->GetPosition().y-27;
 	printf("x:%d, y:%d\n",mx,my);
@@ -248,9 +243,9 @@ void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
 	{
 		if(aux == actionlib::SimpleClientGoalState::SUCCEEDED)
-			ROS_INFO("He llegado correctamente al objetivo");
+			ROS_INFO("Destination reached successfully");
         else
-            ROS_INFO("No he conseguido llegar al objetivo");
+            ROS_INFO("Couldn't reach destination");
         checkGoal_timer->Stop();
 	}
 	else
@@ -446,15 +441,10 @@ uint8[] data*/
             cvSetCaptureProperty(capture,CV_CAP_PROP_CONVERT_RGB, false);
 			if ( !capture )
 			{
-				fprintf( stderr, "ERROR: capture is NULL \n" );
-				//getchar();
+				fprintf( stderr, "ERROR: webcam capture is NULL \n" );
 			}
             while (!GetThread()->TestDestroy())
             {
-                // since this Entry() is implemented in MyFrame context we don't
-                // need any pointer to access the m_data, m_processedData, m_dataCS
-                // variables... very nice!
-
 				IplImage *aux=cvQueryFrame( capture );
 				_IplImg2=aux;
 				cvConvertImage(aux,_IplImg2,CV_CVTIMG_SWAP_RB);
@@ -472,7 +462,7 @@ uint8[] data*/
 
             // TestDestroy() returned true (which means the main thread asked us
             // to terminate as soon as possible) or we ended the long task...
-            printf("2.haria amaituko dugu\n");
+            printf("2.thread will be exited\n");
             return (wxThread::ExitCode)0;
         }
 
@@ -484,30 +474,30 @@ void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang
 		if(joystick_vel<vel_min)
 		{
 			vel.linear.x=vel_min;
-			ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+			//ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
 		}
 		if (joystick_vel>vel_min)
 		{
 		vel.linear.x=vel_max*(joystick_vel/2);
-		ROS_INFO("joystick_vel>vel_min");
+		//ROS_INFO("joystick_vel>vel_min");
 		}
 	}
 	else if(joystick_vel==0)
 	{
 		vel.linear.x=0;
-		ROS_INFO("joystick_vel==0");
+		//ROS_INFO("joystick_vel==0");
 	}
 	else if(joystick_vel<0)
 	{
 		if(joystick_vel>(-1)*vel_min)
 		{
 			vel.linear.x=vel_min;
-			ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+			//ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
 		}
 		if(joystick_vel<(-1)*vel_min)
 		{
 			vel.linear.x=vel_max*(joystick_vel/2);
-			ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+			//ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
 		}
 	}
 	
@@ -517,31 +507,31 @@ void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang
 		if(joystick_ang<vel_ang_min)
 		{
 			vel.angular.z=vel_ang_min;
-			ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
+			//ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
 		}
 
 		if (joystick_ang>vel_ang_min)
 		{
 		vel.angular.z=vel_ang_max*(joystick_ang/2);
-		ROS_INFO("joystick_ang>vel_ang_min");
+		//ROS_INFO("joystick_ang>vel_ang_min");
 		}
 	} 
 	else if (joystick_ang==0)
 	{
 		vel.angular.z=0;
-		ROS_INFO("joystick_ang==0");
+		//ROS_INFO("joystick_ang==0");
 	}
 	else if (joystick_ang<0)
 	{
 		if(joystick_ang>(-1)*vel_ang_min)
 		{
 			vel.angular.z=vel_ang_min;
-			ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
+			//ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
 		}
 		if(joystick_ang<(-1)*vel_ang_min)
 		{
 			vel.angular.z=vel_ang_max*(joystick_ang/2);
-			ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+			//ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
 		}
 	}
 
@@ -582,8 +572,6 @@ void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, 
 		if(qw==0)// first time
 		{
 			begin = ros::Time::now();
-			//ROS_INFO("begin %f",begin.toSec());
-			//ROS_INFO("PS3 controller activated! begin");
 			boolean_var=true;
 			qw++;
 			changeLabel(buttonNumber, true);
@@ -591,15 +579,12 @@ void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, 
 		else
 		{
 			end2 = ros::Time::now();
-			//ROS_INFO("end2 %f",end2.toSec());
 			ros::Duration e=end2-begin2;
-			//ROS_INFO("kenketa2: %f",e.toSec());
 			if(e.toSec()>2.0 && boolean_var2==false)
 			{
 				boolean_var=true;
-				//ROS_INFO("PS3 controller activated!");
 				begin = ros::Time::now();
-				changeLabel(buttonNumber, true); //akatsa, bi aldagaik true badira!
+				changeLabel(buttonNumber, true); 
 			}
 
 		}
@@ -607,13 +592,10 @@ void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, 
 	else if(boolean_var==true && joy->buttons[buttonNumber]==1)
 	{
 		end = ros::Time::now();
-		//ROS_INFO("end %f",end.toSec());
 		ros::Duration d=end-begin;
-		//ROS_INFO("kenketa: %f",d.toSec());
 		if(d.toSec()>2.0)
 		{
 			boolean_var=false;
-			//ROS_INFO("PS3 controller desactivated!");
 			begin2 = ros::Time::now();
 			changeLabel(buttonNumber, false);
 		}

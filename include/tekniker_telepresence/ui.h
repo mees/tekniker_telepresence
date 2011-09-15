@@ -1,9 +1,6 @@
-///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2009)
-// http://www.wxformbuilder.org/
-//
-// PLEASE DO "NOT" EDIT THIS FILE!
-///////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2011, Oier Mees and Technological Center Tekniker
+ */
 
 #ifndef __ui__
 #define __ui__
