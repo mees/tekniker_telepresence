@@ -113,7 +113,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		CCamView*	m_pCameraView2;
 		IplImage _IplImg;
 		IplImage *_IplImg2;
-		geometry_msgs::PoseStamped goal;
+		move_base_msgs::MoveBaseGoal goal;
 		MoveBaseClient* ac;
 		wxMutex s_mutex;
 		wxCriticalSection cs;
@@ -140,6 +140,8 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void sendJoystickVel(double joystick_vel, double joystick_ang);
 		void timeOnButtonPress(bool &boolean_var, bool &boolean_var2,int buttonNumber, const joy::Joy::ConstPtr& joy);
 		void changeLabel(int buttonNumber, bool var);
+		void sendGoal();
+		void checkGoalState(wxTimerEvent& evt);
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKeyPress(wxCommandEvent& event);

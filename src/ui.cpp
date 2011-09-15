@@ -15,10 +15,8 @@ BEGIN_EVENT_TABLE(telepresenceFrame, wxFrame)
 	EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, telepresenceFrame::OnThreadUpdate)
 END_EVENT_TABLE()
 
-//tell the action client that we want to spin a thread by default
-int a =0;
 int qw=0;
-int qq=0;
+
 float vel_min=0.1;
 float vel_max=0.4;
 float vel_ang_min=0.15;
@@ -48,6 +46,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	SetAutoLayout( TRUE );
 	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
 	bSizer4->Add( m_pCameraView2, 0,wxALIGN_RIGHT, 0);
+	ac = new MoveBaseClient("move_base", true);
 	if (wxThreadHelper::Create(wxTHREAD_DETACHED) != wxTHREAD_NO_ERROR)
 	{
 		wxLogError(wxT("Could not create the worker thread!"));
@@ -153,7 +152,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     update_timer_ = new wxTimer(this);
     update_timer_->Start(100);
     Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
-
+	checkGoal_timer=new wxTimer(this);
+    Connect(checkGoal_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::checkGoalState), NULL, this);
     goalUp_timer=new wxTimer(this);
     Connect(goalUp_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalUp), NULL, this);
     goalDown_timer=new wxTimer(this);
@@ -187,16 +187,16 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
 	printf("peopleZ:%f\n",srv.response.depth);
-	goal.header.frame_id = "/base_link";
-	goal.pose.position.x = cos(angle) * srv.response.depth;
-	goal.pose.position.y = sin(angle) * srv.response.depth;
-	printf("goalX:%f goalY:%f\n",goal.pose.position.x,goal.pose.position.y);
-	goal.pose.position.z=0;
+	goal.target_pose.header.frame_id = "/base_link";
+	goal.target_pose.pose.position.x = cos(angle) * srv.response.depth;
+	goal.target_pose.pose.position.y = sin(angle) * srv.response.depth;
+	printf("goalX:%f goalY:%f\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
+	goal.target_pose.pose.position.z=0;
 	btQuaternion quat;
 	quat.setRPY(0.0, 0.0, 0.0);
-	tf::quaternionTFToMsg(quat,goal.pose.orientation);
-	goal.header.stamp = ros::Time::now();
-	goal_pub.publish(goal);
+	tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	goal.target_pose.header.stamp = ros::Time::now();
+	sendGoal();
 }
 
 
@@ -211,19 +211,51 @@ void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 	printf("down pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
+		while(!ac->waitForServer(ros::Duration(5.0))){
+		ROS_INFO("Waiting for the move_base action server to come up");
+		}
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, 0);
-	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
-	    goal.header.stamp=ros::Time::now();
-		goal.header.frame_id = "/base_link";
-		goal.pose.position.x = -1;
-	    goal.pose.position.y = 0;
-	    goal.pose.position.z = 0;
-		goal_pub.publish(goal);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = -1;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+		sendGoal();
 	}
 	else
 	{
 		 goalDown_timer->Start(200);
+	}
+}
+void telepresenceFrame::sendGoal()
+{
+		if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
+	   {
+		   goal.target_pose.header.stamp = ros::Time::now();
+		   ROS_INFO("Sending goal");
+	
+		   ac->sendGoal(goal);
+		   checkGoal_timer->Start(500);
+	   }
+	   else
+		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+}
+void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
+{
+	actionlib::SimpleClientGoalState aux=ac->getState();
+	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
+	{
+		if(aux == actionlib::SimpleClientGoalState::SUCCEEDED)
+			ROS_INFO("He llegado correctamente al objetivo");
+        else
+            ROS_INFO("No he conseguido llegar al objetivo");
+        checkGoal_timer->Stop();
+	}
+	else
+	{
+		printf("pending edo active dago\n");
 	}
 }
 
@@ -274,15 +306,18 @@ void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 	printf("up pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
+		while(!ac->waitForServer(ros::Duration(5.0))){
+		ROS_INFO("Waiting for the move_base action server to come up");
+		}
 		btQuaternion quat;
 		quat.setRPY(0.0, 0.0, 0);
-		tf::quaternionTFToMsg(quat,goal.pose.orientation);
-		goal.header.stamp=ros::Time::now();
-		goal.header.frame_id = "/base_link";
-		goal.pose.position.x = 1;
-		goal.pose.position.y = 0;
-		goal.pose.position.z = 0;
-		goal_pub.publish(goal);
+		tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+		goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 1;
+		goal.target_pose.pose.position.y = 0;
+		goal.target_pose.pose.position.z = 0;
+		sendGoal();
 	}
 	else
 	{
@@ -301,15 +336,18 @@ void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 	printf("left pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
+		while(!ac->waitForServer(ros::Duration(5.0))){
+		ROS_INFO("Waiting for the move_base action server to come up");
+		}
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, pi/2);
-	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
-	    goal.header.stamp=ros::Time::now();
-		goal.header.frame_id = "/base_link";
-		goal.pose.position.x = 0;
-	    goal.pose.position.y = 0;
-	    goal.pose.position.z = 0;
-		goal_pub.publish(goal);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 0;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+		sendGoal();
 	}
 	else
 	{
@@ -327,16 +365,19 @@ void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 	printf("right pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
+		while(!ac->waitForServer(ros::Duration(5.0))){
+		ROS_INFO("Waiting for the move_base action server to come up");
+		}
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, -pi/2);
-	    tf::quaternionTFToMsg(quat,goal.pose.orientation);
+	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
 	
-	    goal.header.stamp=ros::Time::now();
-		goal.header.frame_id = "/base_link";
-		goal.pose.position.x = 0;
-	    goal.pose.position.y = 0;
-	    goal.pose.position.z = 0;
-		goal_pub.publish(goal);
+	    goal.target_pose.header.stamp=ros::Time::now();
+		goal.target_pose.header.frame_id = "/base_link";
+		goal.target_pose.pose.position.x = 0;
+	    goal.target_pose.pose.position.y = 0;
+	    goal.target_pose.pose.position.z = 0;
+		sendGoal();
 	}
 	else
 	{
