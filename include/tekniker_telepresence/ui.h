@@ -93,8 +93,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 
 	
 	protected:
-		wxBitmap m_bitmap2;
-		wxBitmap m_bitmap;
+		wxStaticBitmap* m_bitmap;
 		wxButton* m_button56;
 		wxButton* m_button57;
 		wxButton* m_button61;

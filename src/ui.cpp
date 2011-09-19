@@ -46,6 +46,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
 	bSizer4->Add( m_pCameraView2, 0,wxALIGN_RIGHT, 0);
 	ac = new MoveBaseClient("move_base", true);
+	wxInitAllImageHandlers();
+	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/controller22.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
 	if (wxThreadHelper::Create(wxTHREAD_DETACHED) != wxTHREAD_NO_ERROR)
 	{
 		wxLogError(wxT("Could not create the worker thread!"));
@@ -84,21 +86,28 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer37->Add( bSizer36, 1, wxEXPAND, 5 );
 	bSizer33->Add( bSizer37, 1, wxEXPAND, 5 );
 	bSizer32->Add( bSizer33, 1, wxEXPAND, 5 );
-	bSizer28->Add( bSizer32, 0, wxEXPAND, 5 );
+	bSizer28->Add( bSizer32, 0, wxRIGHT|wxEXPAND|wxLEFT|wxDOWN, 10 );
 	wxBoxSizer* bSizer39;
-	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
-	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
-	prgBar->SetValue(70);
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	bSizer39 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer41;
+	wxBoxSizer* bSizer42;
+	bSizer42 = new wxBoxSizer( wxVERTICAL );
+	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
+	//prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
+	//prgBar->SetValue(70);
+	//m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
+	//m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
+	bSizer39->Add(bSizer41);
+	bSizer41->Add(bSizer42, 1, wxALL, 5);
 	//bSizer39->Add( controller_checkbox, 0, wxLEFT|wxTOP|wxBOTTOM, 5 );
-	bSizer39->Add( m_staticText3, 0, wxALL, 5 );
-	bSizer39->Add( m_staticText4, 0, wxALL, 5 );
-	bSizer40->Add( m_staticText2, 0, wxALL, 5 );
-	bSizer40->Add( prgBar, 0, wxALL, 5 );
+	bSizer42->Add( m_staticText3, 0, wxALL, 5 );
+	bSizer42->Add( m_staticText4, 0, wxALL, 5 );
+	bSizer41->Add( m_bitmap, 0, wxALL|wxALIGN_TOP, 5 );
+	//bSizer40->Add( m_staticText2, 0, wxALL, 5 );
+	//bSizer40->Add( prgBar, 0, wxALL, 5 );
 	
 	bSizer39->Add(bSizer40,0,wxEXPAND,5);
 
