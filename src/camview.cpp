@@ -1,13 +1,6 @@
-////////////////////////////////////////////////////////////////////
-// Name:		implementation of the CCamView class
-// File:		camview.cpp
-// Purpose:		eye/camera view/GUI system control methods
-//
-// Created by:	Larry Lart on 22-Feb-2006
-// Updated by:	
-//
 // Copyright:	(c) 2006 Larry Lart
-////////////////////////////////////////////////////////////////////
+//				(c) 2011 Oier Mees
+
 
 // system header
 #include <math.h>
@@ -35,7 +28,6 @@
 // implement message map
 BEGIN_EVENT_TABLE(CCamView, wxWindow)
 	EVT_PAINT( CCamView::OnPaint )
-	EVT_SIZE( CCamView::OnSize ) 
 END_EVENT_TABLE()
 
 ////////////////////////////////////////////////////////////////////
@@ -178,20 +170,3 @@ void CCamView::CheckUpdate()
 	Update( );
 }
 
-////////////////////////////////////////////////////////////////////
-// Method:	OnSize
-// Class:	CCamView
-// Purose:	adjust on windows resize
-// Input:	reference to size event
-// Output:	nothing
-////////////////////////////////////////////////////////////////////
-void CCamView::OnSize( wxSizeEvent& even )
-{
-	int nWidth = even.GetSize().GetWidth();
-	int nHeight = even.GetSize().GetHeight();
-
-	m_nWidth = nWidth;
-	m_nHeight = nHeight;
-	printf("on size, m_nWidth:%d  m_nHeight:%d\n",m_nWidth,m_nHeight);
-
-}

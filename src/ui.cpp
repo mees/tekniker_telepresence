@@ -9,6 +9,7 @@ namespace enc = sensor_msgs::image_encodings;
 
 static const double pi = 3.14159265358979323846;
 
+//define a new event and a callabck for our secondary thread which will do the image handling
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE, -1)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
 BEGIN_EVENT_TABLE(telepresenceFrame, wxFrame)
@@ -21,6 +22,7 @@ float vel_min=0.1;
 float vel_max=0.4;
 float vel_ang_min=0.15;
 float vel_ang_max=0.7;
+//UI constructor
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
@@ -30,8 +32,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Acelerometer: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	int width, height;
-	this->GetClientSize(&width, &height);
 	m_pCameraView = new CCamView(this, wxPoint(5,15), wxSize(640, 480));
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
 	ac = new MoveBaseClient("move_base", true);
@@ -51,6 +51,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	m_staticText7 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	//create a secondary thread for the image handling
 	if (wxThreadHelper::Create(wxTHREAD_DETACHED) != wxTHREAD_NO_ERROR)
 	{
 		wxLogError(wxT("Could not create the worker thread!"));
@@ -64,7 +65,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	SetAutoLayout(TRUE);
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
-	//bSizer1->SetMinSize( wxSize( 900,700 ) );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
@@ -130,10 +130,12 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	angular_=2;
 	safety_distance = 0;
 	it_=new image_transport::ImageTransport(nh_);
+	//read parameters from launcher file
 	nh_.param("axis_linear", linear_, linear_);
 	nh_.param("axis_angular", angular_, angular_);
 	nh_.param("scale_angular", a_scale_, a_scale_);
 	nh_.param("scale_linear", l_scale_, l_scale_);
+	ros::param::get("safety_distance", safety_distance);
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);
@@ -161,6 +163,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	
 	m_checkbox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( telepresenceFrame::checkBoxClicked ), NULL, this );
 
+    // Connect timers
     update_timer_ = new wxTimer(this);
     update_timer_->Start(100);
     Connect(update_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::onUpdate), NULL, this);
@@ -175,7 +178,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
     goalRight_timer=new wxTimer(this);
     Connect(goalRight_timer->GetId(), wxEVT_TIMER, wxTimerEventHandler(telepresenceFrame::sendGoalRight), NULL, this);
 }
-
+//callback triggered after clicking on the image where the kinects video stream is shown
 void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 {
 	mx = wxGetMousePosition().x - this->GetScreenPosition().x - m_pCameraView->GetPosition().x-2;
@@ -184,6 +187,8 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	tekniker_kinect::depth_server srv;
 	srv.request.x = mx;
 	srv.request.y = my;
+	//call depth service to ask for the depth of (x,y) coordenates of the kinect
+	//this way, we don't subscribe to the depth topic and save bandwidth
 	if (client.call(srv))
 	{
 		ROS_INFO("Depth: %f", srv.response.depth);
@@ -196,13 +201,14 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
 	goal.target_pose.header.frame_id = "/base_link";
-	if (ros::param::has("~safety_distance"))
+	//if we don't substract safety_distance to the received depth, the robot goes to the exact
+	//point of the obstacle that was clicked (for instance a person in the corridor)
+	// and can't reach the destination because there is a obstacle on it
+	//now, it should stop 0.5m before the obstacle
+	if (safety_distance < srv.response.depth)
 	{
-		ros::param::get("~safety_distance", safety_distance);
-		if (safety_distance < srv.response.depth)
-		{
-			srv.response.depth -= safety_distance;
-		}
+		srv.response.depth -= safety_distance;
+		printf("new depth :%f\n",srv.response.depth);
 	}
 	goal.target_pose.pose.position.x = cos(angle) * srv.response.depth;
 	goal.target_pose.pose.position.y = sin(angle) * srv.response.depth;
@@ -230,6 +236,9 @@ void telepresenceFrame::checkBoxClicked(wxCommandEvent& event)
 	}
 
 }
+//check the robots battery. On our tests, the robot didn't publish any status info
+//because of some driver issue
+//TBD: Normalize the battery values in a scale and update battery proggress bar
 void telepresenceFrame::status_callback(const segway_rmp::Status& msg)
 {
 	printf("pb:%d ui:%d\n", msg.pb_battery, msg.ui_battery);
@@ -253,12 +262,13 @@ void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 	}
 	else
 	{
-		if(checkGoal_timer->IsRunning()==false)
+		if(checkGoal_timer->IsRunning()==false && (!ps3joy_activated && !acelerometer_activated))
 		{
 		 goalDown_timer->Start(200);
 		}
 	}
 }
+//in navigation mode, sends a goal to the robot
 void telepresenceFrame::sendGoal()
 {
 		if (ros::Time::now().toSec() - goal.target_pose.header.stamp.toSec() < 2)
@@ -275,6 +285,7 @@ void telepresenceFrame::sendGoal()
 		   ROS_INFO("The destination is too old, aborting");
 		   m_staticText7->SetLabel(wxT("Navigation Status: The destination is too old, aborting"));
 }
+//check the sent goals state and update the UI with the feedback
 void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 {
 	actionlib::SimpleClientGoalState aux=ac->getState();
@@ -294,7 +305,7 @@ void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 	}
 	else
 	{
-		ROS_INFO("pending edo active dago");
+		ROS_INFO("pending or active ");
 		m_staticText7->SetLabel(wxT("Navigation Status: pending or active..."));
 	}
 }
@@ -305,6 +316,7 @@ void telepresenceFrame::RecvDownKeyRelease(wxCommandEvent& event)
 	goalDown_timer->Stop();
 }
 
+//send velocity commands directly to the motor when in teleoperation mode
 void telepresenceFrame::sendGoalUp(wxTimerEvent& evt)
 {
 	printf("sendGoalUp\n");
@@ -313,7 +325,7 @@ void telepresenceFrame::sendGoalUp(wxTimerEvent& evt)
 	vel.angular.z = 0.0; // rad/s
 	vel_pub.publish(vel);
 }
-
+//send velocity commands directly to the motor when in teleoperation mode
 void telepresenceFrame::sendGoalDown(wxTimerEvent& evt)
 {
 	printf("sendGoalDown\n");
@@ -322,7 +334,7 @@ void telepresenceFrame::sendGoalDown(wxTimerEvent& evt)
 	vel.angular.z = 0.0; // rad/s
 	vel_pub.publish(vel);
 }
-
+//send velocity commands directly to the motor when in teleoperation mode
 void telepresenceFrame::sendGoalRight(wxTimerEvent& evt)
 {
 	printf("sendGoalRight\n");
@@ -332,6 +344,7 @@ void telepresenceFrame::sendGoalRight(wxTimerEvent& evt)
 	vel_pub.publish(vel);
 }
 
+//send velocity commands directly to the motor when in teleoperation mode
 void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 {
 	printf("sendGoalLeft\n");
@@ -340,7 +353,8 @@ void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 	vel.angular.z = 0.5; // rad/s
 	vel_pub.publish(vel);
 }
-
+//FIXME: The UI freezes while it's waiting for the movebase server to 
+//come up
 void telepresenceFrame::waitForMoveBaseServer()
 {
 		while(!ac->waitForServer(ros::Duration(3.0))){
@@ -366,7 +380,7 @@ void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 	}
 	else
 	{
-		if (checkGoal_timer->IsRunning()==false)
+		if (checkGoal_timer->IsRunning()==false && (!ps3joy_activated && !acelerometer_activated))
 		{
 		goalUp_timer->Start(200);
 		}
@@ -397,7 +411,7 @@ void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 	}
 	else
 	{
-		if (checkGoal_timer->IsRunning()==false)
+		if (checkGoal_timer->IsRunning()==false && (!ps3joy_activated && !acelerometer_activated))
 		{
 		goalLeft_timer->Start(200);
 		}
@@ -428,7 +442,7 @@ void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 	}
 	else
 	{
-		if (checkGoal_timer->IsRunning()==false)
+		if (checkGoal_timer->IsRunning()==false && (!ps3joy_activated && !acelerometer_activated))
 		{
 		goalRight_timer->Start(200);
 		}
@@ -449,7 +463,7 @@ void telepresenceFrame::onUpdate(wxTimerEvent& evt)
   }
 }
 
-
+//draw the webcams video stream on the UI
 void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
 {
 
@@ -461,7 +475,7 @@ void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
 
 	image_pub_.publish(cv_ptr2.toImageMsg());
 }
-
+//receive the kinects video stream and show it on the UI
 void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& msg)
 {
     cv_bridge::CvImagePtr cv_ptr;
@@ -478,11 +492,14 @@ void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& ms
 	m_pCameraView->DrawCam(&_IplImg);
 
 }
-
+//worker thread for image handling
  wxThread::ExitCode telepresenceFrame::Entry()
         {
             CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
             cvSetCaptureProperty(capture,CV_CAP_PROP_CONVERT_RGB, false);
+            //check for the webcam, if cvCaptureFromCAM doesn't work with any index
+            //try enabling the v4l and ffmpg flas in opencv2 Makefile and compiling it again
+            //(rosmake opencv2) you may have to delete the ROS_NOBUILD
 			if ( !capture )
 			{
 				fprintf( stderr, "ERROR: webcam capture is NULL \n" );
@@ -492,16 +509,18 @@ void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& ms
 				IplImage *aux=cvQueryFrame( capture );
 				_IplImg2=aux;
 				cvConvertImage(aux,_IplImg2,CV_CVTIMG_SWAP_RB);
+				//we grabed a new image from the webcam so fire up our event
+				//and call onThreadUpdate to draw it
 				wxCommandEvent evt(wxEVT_COMMAND_MYTHREAD_UPDATE, wxID_ANY);
 	            this->AddPendingEvent(evt);
 
 			}
 			cvReleaseCapture( &capture );
 
-                //// VERY IMPORTANT: do not call any GUI function inside this
-                ////                 function; rather use wxQueueEvent():
-                //wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
-                    //// we used pointer 'this' assuming it's safe; see OnClose()
+            //// VERY IMPORTANT: do not call any GUI function inside this
+            ////                 function; rather use wxQueueEvent():
+            //wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+            //// we used pointer 'this' assuming it's safe; see OnClose()
 
 
             // TestDestroy() returned true (which means the main thread asked us
@@ -510,6 +529,8 @@ void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& ms
             return (wxThread::ExitCode)0;
         }
 
+//in teleoperation mode, send velocity commands to the robots motor using PS3 controller joystick
+// see http://www.ros.org/wiki/ps3joy/Tutorials/PairingJoystickAndBluetoothDongle
 void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang)
 {
 	vel.linear.y = 0.0; // m/s
@@ -584,6 +605,7 @@ void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang
 	ROS_INFO("sending angular %f, lineal %f",vel.angular.z, vel.linear.x);
 
 }
+//display the controller mode on the UI
 void telepresenceFrame::changeLabel(int buttonNumber, bool var)
 {
 			if(buttonNumber==15)
@@ -608,7 +630,8 @@ void telepresenceFrame::changeLabel(int buttonNumber, bool var)
 				}			
 			}
 }
-
+//this is necessary because somehow the controller is very unreliable at detecting when you press a button
+//it often detects more than one presses, so we count the time between presses to determine if it is a valid press
 void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, int buttonNumber, const joy::Joy::ConstPtr& joy)
 {
 	if (boolean_var==false && joy->buttons[buttonNumber]==1)
@@ -645,6 +668,7 @@ void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, 
 		}
 	}
 }
+//PS3 Controller callback
 void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 {
 	double joystick_ang=a_scale_*joy->axes[angular_];
@@ -661,7 +685,7 @@ void telepresenceFrame::joyCallback(const joy::Joy::ConstPtr& joy)
 		sendJoystickVel(joystick_vel, joystick_ang);
 	}
 }
-
+//destructor
 telepresenceFrame::~telepresenceFrame()
 {
 	// Disconnect Events	
