@@ -113,13 +113,12 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		IplImage *_IplImg2;
 		move_base_msgs::MoveBaseGoal goal;
 		MoveBaseClient* ac;
-		wxMutex s_mutex;
-		wxCriticalSection cs;
 		IplImage *PointCloud_image;
 		CvScalar s;
 		int my;
 		int mx;
 		bool changed;
+		double safety_distance;
 
 
 

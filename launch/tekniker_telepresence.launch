@@ -7,11 +7,14 @@
   </node>
 
  <!-- Axes -->
-  <param name="axis_linear" value="1" type="int"/>
-  <param name="axis_angular" value="0" type="int"/>
-  <param name="scale_linear" value="2" type="double"/>
-  <param name="scale_angular" value="2" type="double"/>
-  <node name="tekniker_telepresence" pkg="tekniker_telepresence" type="kinecta" output="screen"/>
+  <node name="tekniker_telepresence" pkg="tekniker_telepresence" type="kinecta" output="screen" >
+   <param name="axis_linear" value="1" type="int"/>
+   <param name="axis_angular" value="0" type="int"/>
+   <param name="scale_linear" value="2" type="double"/>
+   <param name="scale_angular" value="2" type="double"/>
+   <param name="safety_distance" type="double" value="0.5" />
+  </node>
+
   <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
     <param name="bitrate" value="128"/>
   </node>

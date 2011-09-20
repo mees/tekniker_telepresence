@@ -24,11 +24,6 @@ float vel_ang_max=0.7;
 telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 1100,700 ), wxDefaultSize );
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
-	//bSizer1->SetMinSize( wxSize( 900,700 ) );
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
 	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Joystick: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -39,15 +34,23 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	this->GetClientSize(&width, &height);
 	m_pCameraView = new CCamView(this, wxPoint(5,15), wxSize(640, 480));
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
-	SetAutoLayout( TRUE );
-	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
-	wxBoxSizer* bSizer45;
-	bSizer45 = new wxBoxSizer( wxVERTICAL );
-	bSizer4->Add( bSizer45, 0,wxALIGN_RIGHT, 0);
-	bSizer45->Add( m_pCameraView2, 0,wxALL, 5);
 	ac = new MoveBaseClient("move_base", true);
 	wxInitAllImageHandlers();
 	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/controller22.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button56 = new wxButton( this, wxID_ANY, wxT("Forward"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button57 = new wxButton( this, wxID_ANY, wxT("Turn Left"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button61 = new wxButton( this, wxID_ANY, wxT("Turn Right"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button58 = new wxButton( this, wxID_ANY, wxT("Backward"), wxDefaultPosition, wxDefaultSize, 0 );
+	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
+	prgBar->SetValue(70);
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Webcam Status: OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Running in teleoperation mode!"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText7 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	if (wxThreadHelper::Create(wxTHREAD_DETACHED) != wxTHREAD_NO_ERROR)
 	{
 		wxLogError(wxT("Could not create the worker thread!"));
@@ -58,12 +61,22 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 		wxLogError(wxT("Could not run the worker thread!"));
 		return;
 	}
+	SetAutoLayout(TRUE);
+	wxBoxSizer* bSizer1;
+	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	//bSizer1->SetMinSize( wxSize( 900,700 ) );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
+	wxBoxSizer* bSizer45;
+	bSizer45 = new wxBoxSizer( wxVERTICAL );
+	bSizer4->Add( bSizer45, 0,wxALIGN_RIGHT, 0);
+	bSizer45->Add( m_pCameraView2, 0,wxALL, 5);
 	bSizer1->Add( bSizer4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
-	m_button56 = new wxButton( this, wxID_ANY, wxT("Forward"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer32->Add( m_button56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	wxBoxSizer* bSizer33;
 	bSizer33 = new wxBoxSizer( wxVERTICAL );
@@ -73,15 +86,12 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer38 = new wxBoxSizer( wxHORIZONTAL );
 	wxBoxSizer* bSizer35;
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
-	m_button57 = new wxButton( this, wxID_ANY, wxT("Turn Left"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer35->Add( m_button57, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	bSizer38->Add( bSizer35, 1, wxEXPAND, 5 );
-	m_button61 = new wxButton( this, wxID_ANY, wxT("Turn Right"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer38->Add( m_button61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	bSizer37->Add( bSizer38, 1, wxEXPAND, 5 );
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxVERTICAL );
-	m_button58 = new wxButton( this, wxID_ANY, wxT("Backward"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer36->Add( m_button58, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	bSizer37->Add( bSizer36, 1, wxEXPAND, 5 );
 	bSizer33->Add( bSizer37, 1, wxEXPAND, 5 );
@@ -93,16 +103,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer42;
 	bSizer42 = new wxBoxSizer( wxVERTICAL );
 	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
-	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
-	prgBar->SetValue(70);
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Webcam Status: OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Running in teleoperation mode!"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	m_staticText7 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
@@ -112,26 +112,23 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer42->Add( m_staticText4, 0, wxALL, 5 );
 	bSizer41->Add( m_bitmap, 0, wxALL|wxALIGN_TOP, 5 );
 	bSizer45->Add( m_staticText2, 0, wxTOP|wxLEFT, 15 );
+	bSizer45->AddSpacer(5);
 	bSizer45->Add( prgBar, 0, wxLEFT, 15 );
 	bSizer45->Add( m_staticText5, 0, wxTOP|wxLEFT, 15 );
 	bSizer45->Add( m_staticText6, 0, wxTOP|wxLEFT, 15 );
 	bSizer45->Add( m_staticText7, 0, wxTOP|wxLEFT, 15 );
-	
-	bSizer39->Add(bSizer40,0,wxEXPAND,5);
-
+	bSizer39->Add( bSizer40,0,wxEXPAND,5);
 	bSizer28->Add( bSizer39, 1, wxEXPAND, 5 );
-
 	bSizer1->Add( bSizer28, 0, wxEXPAND, 5 );
-
-	this->SetSizer( bSizer1 );
+	this->SetSizer( bSizer1);
 	this->Layout();
 
 	changed=false;
 	mx=0;
 	my=0;
-
 	linear_=1;
 	angular_=2;
+	safety_distance = 0;
 	it_=new image_transport::ImageTransport(nh_);
 	nh_.param("axis_linear", linear_, linear_);
 	nh_.param("axis_angular", angular_, angular_);
@@ -163,7 +160,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_pCameraView->Connect(wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPressOnImage ), NULL, this );
 	
 	m_checkbox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( telepresenceFrame::checkBoxClicked ), NULL, this );
-	srand(time(NULL));
 
     update_timer_ = new wxTimer(this);
     update_timer_->Start(100);
@@ -190,7 +186,7 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	srv.request.y = my;
 	if (client.call(srv))
 	{
-		ROS_INFO("Depth: %ld", (long int)srv.response.depth);
+		ROS_INFO("Depth: %f", srv.response.depth);
 	}
 	else
 	{
@@ -199,8 +195,15 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 	float columnaX = -1*(mx - 320.0);
 	float angle = asin((columnaX/320.0) * SINFOV);
 	printf("angle:%f\n",angle);
-	printf("peopleZ:%f\n",srv.response.depth);
 	goal.target_pose.header.frame_id = "/base_link";
+	if (ros::param::has("~safety_distance"))
+	{
+		ros::param::get("~safety_distance", safety_distance);
+		if (safety_distance < srv.response.depth)
+		{
+			srv.response.depth -= safety_distance;
+		}
+	}
 	goal.target_pose.pose.position.x = cos(angle) * srv.response.depth;
 	goal.target_pose.pose.position.y = sin(angle) * srv.response.depth;
 	printf("goalX:%f goalY:%f\n",goal.target_pose.pose.position.x,goal.target_pose.pose.position.y);
@@ -461,17 +464,6 @@ void telepresenceFrame::OnThreadUpdate(wxCommandEvent& evt)
 
 void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& msg)
 {
-/*rosmsg show sensor_msgs/Image
-Header header
-  uint32 seq
-  time stamp
-  string frame_id
-uint32 height
-uint32 width
-string encoding
-uint8 is_bigendian
-uint32 step
-uint8[] data*/
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
@@ -689,9 +681,23 @@ telepresenceFrame::~telepresenceFrame()
 	delete goalDown_timer;
 	delete goalRight_timer;
 	delete goalLeft_timer;
-	delete &goal;
 	delete m_pCameraView;
 	delete m_pCameraView2;
+	delete prgBar;
+	delete m_bitmap;
+	delete m_button56;
+	delete m_button57;
+	delete m_button61;
+	delete m_button58;
+	delete m_staticText2;
+	delete m_checkbox;
+	delete m_staticText3;
+	delete m_staticText4;
+	delete m_staticText5;
+	delete m_staticText6;
+	delete m_staticText7;
+	delete ac;
+	delete PointCloud_image;
 	if(it_!=NULL)
 		delete it_;
 	if (GetThread() && GetThread()->IsRunning())
