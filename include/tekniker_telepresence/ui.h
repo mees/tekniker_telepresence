@@ -103,6 +103,9 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxCheckBox* controller_checkbox;
 		wxStaticText* m_staticText3;
 		wxStaticText* m_staticText4;
+		wxStaticText* m_staticText5;
+		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText7;
 		int m_nWidth;
 		int m_nHeight;
 		CCamView*	m_pCameraView;
@@ -138,6 +141,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		void changeLabel(int buttonNumber, bool var);
 		void sendGoal();
 		void checkGoalState(wxTimerEvent& evt);
+		void waitForMoveBaseServer();
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void RecvUpKeyPress(wxCommandEvent& event);

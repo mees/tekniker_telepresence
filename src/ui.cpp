@@ -44,7 +44,10 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
 	SetAutoLayout( TRUE );
 	bSizer4->Add( m_pCameraView, 0, wxALIGN_CENTER_HORIZONTAL, 0);
-	bSizer4->Add( m_pCameraView2, 0,wxALIGN_RIGHT, 0);
+	wxBoxSizer* bSizer45;
+	bSizer45 = new wxBoxSizer( wxVERTICAL );
+	bSizer4->Add( bSizer45, 0,wxALIGN_RIGHT, 0);
+	bSizer45->Add( m_pCameraView2, 0,wxALL, 5);
 	ac = new MoveBaseClient("move_base", true);
 	wxInitAllImageHandlers();
 	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/controller22.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
@@ -93,21 +96,29 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer42;
 	bSizer42 = new wxBoxSizer( wxVERTICAL );
 	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
-	//prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
-	//prgBar->SetValue(70);
-	//m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
-	//m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
+	prgBar->SetValue(70);
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Webcam Status: OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Destination: None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Navigation Status: None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
 	bSizer39->Add( m_checkbox, 0, wxALL, 5 );
 	bSizer39->Add(bSizer41);
 	bSizer41->Add(bSizer42, 1, wxALL, 5);
-	//bSizer39->Add( controller_checkbox, 0, wxLEFT|wxTOP|wxBOTTOM, 5 );
 	bSizer42->Add( m_staticText3, 0, wxALL, 5 );
 	bSizer42->Add( m_staticText4, 0, wxALL, 5 );
 	bSizer41->Add( m_bitmap, 0, wxALL|wxALIGN_TOP, 5 );
-	//bSizer40->Add( m_staticText2, 0, wxALL, 5 );
-	//bSizer40->Add( prgBar, 0, wxALL, 5 );
+	bSizer45->Add( m_staticText2, 0, wxTOP|wxLEFT, 15 );
+	bSizer45->Add( prgBar, 0, wxLEFT, 15 );
+	bSizer45->Add( m_staticText5, 0, wxTOP|wxLEFT, 15 );
+	bSizer45->Add( m_staticText6, 0, wxTOP|wxLEFT, 15 );
+	bSizer45->Add( m_staticText7, 0, wxTOP|wxLEFT, 15 );
 	
 	bSizer39->Add(bSizer40,0,wxEXPAND,5);
 
@@ -215,9 +226,7 @@ void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 	printf("down pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
-		while(!ac->waitForServer(ros::Duration(5.0))){
-		ROS_INFO("Waiting for the move_base action server to come up");
-		}
+		waitForMoveBaseServer();
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, 0);
 	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
@@ -239,12 +248,15 @@ void telepresenceFrame::sendGoal()
 	   {
 		   goal.target_pose.header.stamp = ros::Time::now();
 		   ROS_INFO("Sending goal");
-	
+		   m_staticText7->SetLabel(wxT("Navigation Status: Sending goal"));
+		   wxString mystring = wxString::Format(wxT("Destination: %f, %f orientation: %f"), goal.target_pose.pose.position.x, goal.target_pose.pose.position.y, goal.target_pose.pose.orientation.z);
+		   m_staticText6->SetLabel(mystring);
 		   ac->sendGoal(goal);
 		   checkGoal_timer->Start(500);
 	   }
 	   else
-		   ROS_INFO("El objetivo es demasiado antiguo, no se intentará");
+		   ROS_INFO("The destination is too old, aborting");
+		   m_staticText7->SetLabel(wxT("Navigation Status: The destination is too old, aborting"));
 }
 void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 {
@@ -252,14 +264,21 @@ void telepresenceFrame::checkGoalState(wxTimerEvent& evt)
 	if(aux!=actionlib::SimpleClientGoalState::PENDING && aux!=actionlib::SimpleClientGoalState::ACTIVE)
 	{
 		if(aux == actionlib::SimpleClientGoalState::SUCCEEDED)
+		{
 			ROS_INFO("Destination reached successfully");
+			m_staticText7->SetLabel(wxT("Navigation Status: Destination reached successfully"));
+		}
         else
+        {
             ROS_INFO("Couldn't reach destination");
+    		m_staticText7->SetLabel(wxT("Navigation Status: Couldn't reach destination"));
+		}
         checkGoal_timer->Stop();
 	}
 	else
 	{
-		printf("pending edo active dago\n");
+		ROS_INFO("pending edo active dago");
+		m_staticText7->SetLabel(wxT("Navigation Status: pending or active..."));
 	}
 }
 
@@ -305,14 +324,19 @@ void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 	vel_pub.publish(vel);
 }
 
+void telepresenceFrame::waitForMoveBaseServer()
+{
+		while(!ac->waitForServer(ros::Duration(3.0))){
+		ROS_INFO("Waiting for the move_base action server to come up");
+		m_staticText7->SetLabel(wxT("Navigation Status: Waiting for the move_base action server to come up"));
+		}
+}
 void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 {
 	printf("up pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
-		while(!ac->waitForServer(ros::Duration(5.0))){
-		ROS_INFO("Waiting for the move_base action server to come up");
-		}
+		waitForMoveBaseServer();
 		btQuaternion quat;
 		quat.setRPY(0.0, 0.0, 0);
 		tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
@@ -340,9 +364,7 @@ void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 	printf("left pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
-		while(!ac->waitForServer(ros::Duration(5.0))){
-		ROS_INFO("Waiting for the move_base action server to come up");
-		}
+		waitForMoveBaseServer();
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, pi/2);
 	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
@@ -369,9 +391,7 @@ void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 	printf("right pressed\n");
 	if(m_checkbox->GetValue()==true)
 	{
-		while(!ac->waitForServer(ros::Duration(5.0))){
-		ROS_INFO("Waiting for the move_base action server to come up");
-		}
+		waitForMoveBaseServer();
 		btQuaternion quat;
 	    quat.setRPY(0.0, 0.0, -pi/2);
 	    tf::quaternionTFToMsg(quat,goal.target_pose.pose.orientation);
