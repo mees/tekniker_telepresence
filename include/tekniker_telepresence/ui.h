@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, Oier Mees and Technological Center Tekniker
+ * Copyright (C) 2011, Oier Mees and Tekniker Technological Center 
  */
 
 #ifndef __ui__
