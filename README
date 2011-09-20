@@ -1,1 +1,81 @@
-f
+The aim of this project is to develop a telepresence and teleoperation application in the robotic field using open source software.
+
+Used tools:
+  Hardware
+    Segway rpm 200 robot (sensoreak?)
+    Kinect camera on top of the robot
+    Webcam for the client
+    PS3 Controller
+
+  Software
+   ROS http://www.ros.org diamondback (also works with electric)
+   Ubuntu  10.04 Lucid
+   Opencv2 stack for the image handling
+   PS3Joy stack for the PS3 controller 
+   Openni stack for the kinect
+   audio_capture stack to capture and stream the webcams microphones sound
+
+
+How to compile and run the application
+--------------------------------------
+
+on the robot:
+  1) enable navigation mode, depends on the robot
+  2) start kinect topic with 
+     $ rosrun openni_camera openni_node
+  3) if you are streaming the video over wifi, you may want to resize the image to decrease the latency
+     $ rosrun tekniker_kinect kinect_reductor  50 5 /image_rgb:=/camera/rgb/image_color
+     in this case, the launcher file of the client has to be changed  to remap the rgb topic by uncommenting the following line
+     <remap from="/camera/rgb/image_color" to="/image_resized_rgb"/>
+  4) start the depth service, which will return the mean depth (x,y) coordinates in the kinect
+     $ rosrun tekniker_kinect depth_server
+  5) if you don't have an actual robot you can always use a simulator
+      $ roslaunch tekniker_simulation tmm_stage.launch
+      $ roslaunch 2dnav_segway_rmp move_base_tmm_simulator.launch
+
+
+on the client machine:
+  1) enable ps3 controller, see http://www.ros.org/wiki/ps3joy/Tutorials/PairingJoystickAndBluetoothDongle
+     $ sudo bash
+     $ rosrun ps3joy ps3joy.py
+     if it doesn't activate, try the last method described in http://www.ros.org/wiki/ps3joy/KarmicInstructions
+     which is to edit /lib/udev/rules.d/97-bluetooth.rules to disable loading of bluetoothd
+   2)run the actual program
+     $ rosmake tekniker_telepresence
+
+then try launching
+$ roslaunch tekniker_telepresence tekniker_telepresence.launch 
+
+
+Known Issues
+------------
+
+OpenCV2 has to be compiled with v4l and ffmp support to enable webcam capture. 
+You will have to this if you get the "ERROR: webcam capture is NULL" message and no other camera index works. 
+Try enabling the v4l and ffmpg flags in opencv2 Makefile and compiling it again
+(rosmake opencv2) you may have to delete the ROS_NOBUILD.
+
+As mentioned earlier, if you can't pair the PS3 controller you may have to disable other bluetooth devices for it to work.
+http://www.ros.org/wiki/ps3joy/KarmicInstructions
+
+The battery progress bar doesn't change. Our segway driver had an issue and didn't expose the status information.
+The callback is done, normalizing the values to a scale and updating the progressbar should be trivial.
+
+Streaming kinect audio over ROS doesn't work currently. Libfreenect unstable branch has some working demos for the kinects 4 mics, but a ROS node for it is missing.
+The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack.
+
+
+Future work
+-----------
+
+Solving the known issues
+
+Show a map to locate the robot
+
+Give some kind of feedback of the nearest obstacles distance in order to help navigation
+
+Show video and audio stream quality and feedback on the UI like in skype videoconferences.
+
+
+   
+   

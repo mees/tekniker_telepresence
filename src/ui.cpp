@@ -38,9 +38,13 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	wxInitAllImageHandlers();
 	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/controller22.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_button56 = new wxButton( this, wxID_ANY, wxT("Forward"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button56->SetToolTip( wxT("Hold pressed to go forward") );
 	m_button57 = new wxButton( this, wxID_ANY, wxT("Turn Left"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button57->SetToolTip( wxT("Hold pressed to turn left") );
 	m_button61 = new wxButton( this, wxID_ANY, wxT("Turn Right"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button61->SetToolTip( wxT("Hold pressed to turn right") );
 	m_button58 = new wxButton( this, wxID_ANY, wxT("Backward"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button58->SetToolTip( wxT("Hold pressed to go backward") );
 	prgBar= new wxGauge(this,  wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL,  wxDefaultValidator, wxT("Battery"));
 	prgBar->SetValue(70);
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Battery"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -228,11 +232,19 @@ void telepresenceFrame::checkBoxClicked(wxCommandEvent& event)
 	{
 		m_staticText7->SetLabel(wxEmptyString);
 		m_staticText6->SetLabel(wxT("Running in teleoperation mode!"));
+		m_button56->SetToolTip( wxT("Hold pressed to go forward") );
+		m_button57->SetToolTip( wxT("Hold pressed to turn left") );
+		m_button61->SetToolTip( wxT("Hold pressed to turn right") );
+		m_button58->SetToolTip( wxT("Hold pressed to go backward") );
 	}
 	if(m_checkbox->GetValue()==true && checkGoal_timer->IsRunning()==false)
 	{
 		m_staticText7->SetLabel(wxT("Navigation Status: None"));
 		m_staticText6->SetLabel(wxT("Destination: None"));
+		m_button56->SetToolTip( wxT("Click to navigate forward") );
+		m_button57->SetToolTip( wxT("Click to navigate left") );
+		m_button61->SetToolTip( wxT("Click to navigate right") );
+		m_button58->SetToolTip( wxT("Click to navigate backward") );
 	}
 
 }
@@ -498,7 +510,7 @@ void telepresenceFrame::imageColor_callback(const sensor_msgs::ImageConstPtr& ms
             CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
             cvSetCaptureProperty(capture,CV_CAP_PROP_CONVERT_RGB, false);
             //check for the webcam, if cvCaptureFromCAM doesn't work with any index
-            //try enabling the v4l and ffmpg flas in opencv2 Makefile and compiling it again
+            //try enabling the v4l and ffmpg flags in opencv2 Makefile and compiling it again
             //(rosmake opencv2) you may have to delete the ROS_NOBUILD
 			if ( !capture )
 			{
