@@ -1,8 +1,8 @@
-The aim of this project is to develop a telepresence and teleoperation application in the robotic field using open source software.
+The aim of this project is to develop a telepresence and teleoperation application in the robotic field using open source software
 
 Used tools:
   Hardware
-    Segway rpm 200 robot (sensoreak?)
+    Segway rpm 200 robot (with following sensors: laser range finder, termopile, sonar, bumper, encoder, stargazer IR to read tags in indoor navigation)
     Kinect camera on top of the robot
     Webcam for the client
     PS3 Controller
@@ -59,10 +59,12 @@ As mentioned earlier, if you can't pair the PS3 controller you may have to disab
 http://www.ros.org/wiki/ps3joy/KarmicInstructions
 
 The battery progress bar doesn't change. Our segway driver had an issue and didn't expose the status information.
-The callback is done, normalizing the values to a scale and updating the progressbar should be trivial.
+The callback is done, normalizing the values to a scale and updating the progressbar should be trivial
 
 Streaming kinect audio over ROS doesn't work currently. Libfreenect unstable branch has some working demos for the kinects 4 mics, but a ROS node for it is missing.
-The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack.
+The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack
+
+When exiting the application on the client, only the tekniker_telepresence node is finished, the audio_capture and ps3joy nodes have to be terminated with ctrl-c
 
 
 Future work
@@ -74,7 +76,7 @@ Show a map to locate the robot
 
 Give some kind of feedback of the nearest obstacles distance in order to help navigation
 
-Show video and audio stream quality and feedback on the UI like in skype videoconferences.
+Show video and audio stream quality and feedback on the UI like in skype videoconferences
 
 
    

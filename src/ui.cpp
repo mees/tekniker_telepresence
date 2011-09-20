@@ -288,7 +288,7 @@ void telepresenceFrame::sendGoal()
 		   goal.target_pose.header.stamp = ros::Time::now();
 		   ROS_INFO("Sending goal");
 		   m_staticText7->SetLabel(wxT("Navigation Status: Sending goal"));
-		   wxString mystring = wxString::Format(wxT("Destination: %f, %f orientation: %f"), goal.target_pose.pose.position.x, goal.target_pose.pose.position.y, goal.target_pose.pose.orientation.z);
+		   wxString mystring = wxString::Format(wxT("Destination: %.2f, %.2f orientation: %.2f"), goal.target_pose.pose.position.x, goal.target_pose.pose.position.y, tf::getYaw(goal.target_pose.pose.orientation)*180/pi);
 		   m_staticText6->SetLabel(mystring);
 		   ac->sendGoal(goal);
 		   checkGoal_timer->Start(500);
