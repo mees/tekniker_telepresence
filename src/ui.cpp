@@ -31,9 +31,6 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	m_checkbox = new wxCheckBox(this, wxID_ANY, wxT("Navigation On?"), wxDefaultPosition, wxDefaultSize, 0);
 	m_checkbox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	//controller_checkbox = new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
-	//controller_checkbox->SetValue(false);
-	//controller_checkbox->Disable();
 	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Joystick: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Acelerometer: OFF"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -102,9 +99,9 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Webcam Status: OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Destination: None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, wxT("Running in teleoperation mode!"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	m_staticText7 = new wxStaticText( this, wxID_ANY, wxT("Navigation Status: None"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
@@ -164,7 +161,8 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_button61->Connect( wxEVT_LEFT_UP, wxCommandEventHandler( telepresenceFrame::RecvRightKeyRelease ), NULL, this );
 	
 	m_pCameraView->Connect(wxEVT_LEFT_DOWN, wxCommandEventHandler( telepresenceFrame::RecvRightKeyPressOnImage ), NULL, this );
-
+	
+	m_checkbox->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( telepresenceFrame::checkBoxClicked ), NULL, this );
 	srand(time(NULL));
 
     update_timer_ = new wxTimer(this);
@@ -215,7 +213,20 @@ void telepresenceFrame::RecvRightKeyPressOnImage(wxCommandEvent& event)
 }
 
 
+void telepresenceFrame::checkBoxClicked(wxCommandEvent& event)
+{
+	if(m_checkbox->GetValue()==false && checkGoal_timer->IsRunning()==false)
+	{
+		m_staticText7->SetLabel(wxEmptyString);
+		m_staticText6->SetLabel(wxT("Running in teleoperation mode!"));
+	}
+	if(m_checkbox->GetValue()==true && checkGoal_timer->IsRunning()==false)
+	{
+		m_staticText7->SetLabel(wxT("Navigation Status: None"));
+		m_staticText6->SetLabel(wxT("Destination: None"));
+	}
 
+}
 void telepresenceFrame::status_callback(const segway_rmp::Status& msg)
 {
 	printf("pb:%d ui:%d\n", msg.pb_battery, msg.ui_battery);
@@ -239,7 +250,10 @@ void telepresenceFrame::RecvDownKeyPress(wxCommandEvent& event)
 	}
 	else
 	{
+		if(checkGoal_timer->IsRunning()==false)
+		{
 		 goalDown_timer->Start(200);
+		}
 	}
 }
 void telepresenceFrame::sendGoal()
@@ -334,7 +348,7 @@ void telepresenceFrame::waitForMoveBaseServer()
 void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 {
 	printf("up pressed\n");
-	if(m_checkbox->GetValue()==true)
+	if(m_checkbox->GetValue()==true && checkGoal_timer->IsRunning()==false)
 	{
 		waitForMoveBaseServer();
 		btQuaternion quat;
@@ -349,7 +363,10 @@ void telepresenceFrame::RecvUpKeyPress(wxCommandEvent& event)
 	}
 	else
 	{
+		if (checkGoal_timer->IsRunning()==false)
+		{
 		goalUp_timer->Start(200);
+		}
 	}
 }
 void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
@@ -362,7 +379,7 @@ void telepresenceFrame::RecvUpKeyRelease(wxCommandEvent& event)
 void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 {
 	printf("left pressed\n");
-	if(m_checkbox->GetValue()==true)
+	if(m_checkbox->GetValue()==true && checkGoal_timer->IsRunning()==false)
 	{
 		waitForMoveBaseServer();
 		btQuaternion quat;
@@ -377,7 +394,10 @@ void telepresenceFrame::RecvLeftKeyPress( wxCommandEvent& event )
 	}
 	else
 	{
+		if (checkGoal_timer->IsRunning()==false)
+		{
 		goalLeft_timer->Start(200);
+		}
 	}
 }
 
@@ -389,7 +409,7 @@ void telepresenceFrame::RecvLeftKeyRelease( wxCommandEvent& event )
 void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 {
 	printf("right pressed\n");
-	if(m_checkbox->GetValue()==true)
+	if(m_checkbox->GetValue()==true && checkGoal_timer->IsRunning()==false)
 	{
 		waitForMoveBaseServer();
 		btQuaternion quat;
@@ -405,7 +425,10 @@ void telepresenceFrame::RecvRightKeyPress( wxCommandEvent& event )
 	}
 	else
 	{
+		if (checkGoal_timer->IsRunning()==false)
+		{
 		goalRight_timer->Start(200);
+		}
 	}		
 }
 void telepresenceFrame::RecvRightKeyRelease( wxCommandEvent& event )

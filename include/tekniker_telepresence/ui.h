@@ -100,7 +100,6 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		wxButton* m_button58;
 		wxStaticText* m_staticText2;
 		wxCheckBox* m_checkbox;
-		wxCheckBox* controller_checkbox;
 		wxStaticText* m_staticText3;
 		wxStaticText* m_staticText4;
 		wxStaticText* m_staticText5;
@@ -153,6 +152,7 @@ class telepresenceFrame : public wxFrame, public wxThreadHelper
 		virtual void RecvRightKeyPress(wxCommandEvent& event);
 		virtual void RecvRightKeyRelease(wxCommandEvent& event);
 		virtual void RecvRightKeyPressOnImage(wxCommandEvent& event);
+		virtual void checkBoxClicked(wxCommandEvent& event);
 
 		virtual wxThread::ExitCode Entry();
 		void OnThreadUpdate(wxCommandEvent& evt);
