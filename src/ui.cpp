@@ -646,37 +646,40 @@ void telepresenceFrame::changeLabel(int buttonNumber, bool var)
 //it often detects more than one presses, so we count the time between presses to determine if it is a valid press
 void telepresenceFrame::timeOnButtonPress(bool &boolean_var,bool &boolean_var2, int buttonNumber, const joy::Joy::ConstPtr& joy)
 {
-	if (boolean_var==false && joy->buttons[buttonNumber]==1)
+	if(m_checkbox->GetValue()==false && checkGoal_timer->IsRunning()==false)
 	{
-		if(qw==0)// first time
+		if (boolean_var==false && joy->buttons[buttonNumber]==1)
 		{
-			begin = ros::Time::now();
-			boolean_var=true;
-			qw++;
-			changeLabel(buttonNumber, true);
-		}
-		else
-		{
-			end2 = ros::Time::now();
-			ros::Duration e=end2-begin2;
-			if(e.toSec()>2.0 && boolean_var2==false)
+			if(qw==0)// first time
 			{
-				boolean_var=true;
 				begin = ros::Time::now();
-				changeLabel(buttonNumber, true); 
+				boolean_var=true;
+				qw++;
+				changeLabel(buttonNumber, true);
 			}
-
+			else
+			{
+				end2 = ros::Time::now();
+				ros::Duration e=end2-begin2;
+				if(e.toSec()>2.0 && boolean_var2==false)
+				{
+					boolean_var=true;
+					begin = ros::Time::now();
+					changeLabel(buttonNumber, true); 
+				}
+	
+			}
 		}
-	}
-	else if(boolean_var==true && joy->buttons[buttonNumber]==1)
-	{
-		end = ros::Time::now();
-		ros::Duration d=end-begin;
-		if(d.toSec()>2.0)
+		else if(boolean_var==true && joy->buttons[buttonNumber]==1)
 		{
-			boolean_var=false;
-			begin2 = ros::Time::now();
-			changeLabel(buttonNumber, false);
+			end = ros::Time::now();
+			ros::Duration d=end-begin;
+			if(d.toSec()>2.0)
+			{
+				boolean_var=false;
+				begin2 = ros::Time::now();
+				changeLabel(buttonNumber, false);
+			}
 		}
 	}
 }
