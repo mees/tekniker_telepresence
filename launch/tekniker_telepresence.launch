@@ -13,7 +13,7 @@
    <param name="scale_linear" value="2" type="double"/>
    <param name="scale_angular" value="2" type="double"/>
    <param name="safety_distance" type="double" value="0.5" />
-  <!--   <remap from="/camera/rgb/image_color" to="/image_resized_rgb"/>  uncomment this line if you are using the image reductor, see README -->
+  <!--   <remap from="/camera/rgb/image_color" to="/image_resized"/>  uncomment this line if you are using the image reductor, see README -->
   </node>
 
   <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">

@@ -23,10 +23,10 @@ on the robot:
   1) enable navigation mode, depends on the robot
   2) start kinect topic with 
      $ rosrun openni_camera openni_node
-  3) optional: if you are streaming the video over wifi, you may want to resize the image to decrease the latency
-     $ rosrun tekniker_kinect kinect_reductor  50 5 /image_rgb:=/camera/rgb/image_color
+  3) optional: if you are streaming the video over wifi, you may want to resize the image to decrease the latency using the code kindly provided by José María Martínez Otzeta
+     $ rosrun tekniker_telepresence image_resizer  50 5 /image:=/camera/rgb/image_color
      in this case, the launcher file of the client has to be changed  to remap the rgb topic by uncommenting the following line
-     <remap from="/camera/rgb/image_color" to="/image_resized_rgb"/>
+     <remap from="/camera/rgb/image_color" to="/image_resized"/>
   4) start the depth service, which will return the mean depth (x,y) coordinates in the kinect
      $ rosrun tekniker_kinect depth_server
   5) optional: if you don't have an actual robot you can always use a simulator (the following packages are not provided)
