@@ -2,7 +2,7 @@ The aim of this project is to develop a telepresence and teleoperation applicati
 
 Used tools:
   Hardware
-    Segway rpm 200 robot (with following sensors: laser range finder, termopile, sonar, bumper, encoder, stargazer IR to read tags in indoor navigation)
+    Segway rpm 200 robot (with following sensors: laser range finder, thermopile, sonar, bumper, encoder, stargazer IR to read tags in indoor navigation)
     Kinect camera on top of the robot
     Webcam for the client
     PS3 Controller
@@ -23,15 +23,18 @@ on the robot:
   1) enable navigation mode, depends on the robot
   2) start kinect topic with 
      $ rosrun openni_camera openni_node
-  3) if you are streaming the video over wifi, you may want to resize the image to decrease the latency
+  3) optional: if you are streaming the video over wifi, you may want to resize the image to decrease the latency
      $ rosrun tekniker_kinect kinect_reductor  50 5 /image_rgb:=/camera/rgb/image_color
      in this case, the launcher file of the client has to be changed  to remap the rgb topic by uncommenting the following line
      <remap from="/camera/rgb/image_color" to="/image_resized_rgb"/>
   4) start the depth service, which will return the mean depth (x,y) coordinates in the kinect
      $ rosrun tekniker_kinect depth_server
-  5) if you don't have an actual robot you can always use a simulator
+  5) optional: if you don't have an actual robot you can always use a simulator (the following packages are not provided)
       $ roslaunch tekniker_simulation tmm_stage.launch
       $ roslaunch 2dnav_segway_rmp move_base_tmm_simulator.launch
+  6) After completing the steps of the client machine, you have to launch audio_play to play the sound that is streamed over the /audio topic
+      $ rosmake audio_play
+      $ roslaunch audio_play play.launch
 
 
 on the client machine:
@@ -40,11 +43,9 @@ on the client machine:
      $ rosrun ps3joy ps3joy.py
      if it doesn't activate, try the last method described in http://www.ros.org/wiki/ps3joy/KarmicInstructions
      which is to edit /lib/udev/rules.d/97-bluetooth.rules to disable loading of bluetoothd
-   2)run the actual program
+   2)compile and run the actual program with the launcher file
      $ rosmake tekniker_telepresence
-
-then try launching
-$ roslaunch tekniker_telepresence tekniker_telepresence.launch 
+     $ roslaunch tekniker_telepresence tekniker_telepresence.launch 
 
 
 Known Issues
@@ -61,7 +62,8 @@ http://www.ros.org/wiki/ps3joy/KarmicInstructions
 The battery progress bar doesn't change. Our segway driver had an issue and didn't expose the status information.
 The callback is done, normalizing the values to a scale and updating the progressbar should be trivial
 
-Streaming kinect audio over ROS doesn't work currently. Libfreenect unstable branch has some working demos for the kinects 4 mics, but a ROS node for it is missing.
+Streaming kinect audio over ROS doesn't work currently. Libfreenect unstable branch (https://github.com/OpenKinect/libfreenect/tree/unstable) 
+has some working demos for the kinects 4 mics, but a ROS node for it is missing.
 The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack
 
 When exiting the application on the client, only the tekniker_telepresence node is finished, the audio_capture and ps3joy nodes have to be terminated with ctrl-c
@@ -77,6 +79,8 @@ Show a map to locate the robot
 Give some kind of feedback of the nearest obstacles distance in order to help navigation
 
 Show video and audio stream quality and feedback on the UI like in skype videoconferences
+
+Migrate from wxWidgets to Qt
 
 
    

@@ -551,30 +551,30 @@ void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang
 		if(joystick_vel<vel_min)
 		{
 			vel.linear.x=vel_min;
-			//ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
+			ROS_INFO("joystick_vel>0 && joystick_vel<vel_min");
 		}
 		if (joystick_vel>vel_min)
 		{
 		vel.linear.x=vel_max*(joystick_vel/2);
-		//ROS_INFO("joystick_vel>vel_min");
+		ROS_INFO("joystick_vel>vel_min");
 		}
 	}
 	else if(joystick_vel==0)
 	{
 		vel.linear.x=0;
-		//ROS_INFO("joystick_vel==0");
+		ROS_INFO("joystick_vel==0");
 	}
 	else if(joystick_vel<0)
 	{
 		if(joystick_vel>(-1)*vel_min)
 		{
 			vel.linear.x=vel_min;
-			//ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
+			ROS_INFO("joystick_vel<0 && (joystick_vel>(-1)*vel_min)");
 		}
 		if(joystick_vel<(-1)*vel_min)
 		{
 			vel.linear.x=vel_max*(joystick_vel/2);
-			//ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
+			ROS_INFO("joystick_vel<0 && (joystick_vel<(-1)*vel_min)");
 		}
 	}
 	
@@ -584,31 +584,31 @@ void telepresenceFrame::sendJoystickVel(double joystick_vel, double joystick_ang
 		if(joystick_ang<vel_ang_min)
 		{
 			vel.angular.z=vel_ang_min;
-			//ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
+			ROS_INFO("joystick_ang>0 && joystick_ang<vel_ang_min");
 		}
 
 		if (joystick_ang>vel_ang_min)
 		{
 		vel.angular.z=vel_ang_max*(joystick_ang/2);
-		//ROS_INFO("joystick_ang>vel_ang_min");
+		ROS_INFO("joystick_ang>vel_ang_min");
 		}
 	} 
 	else if (joystick_ang==0)
 	{
 		vel.angular.z=0;
-		//ROS_INFO("joystick_ang==0");
+		ROS_INFO("joystick_ang==0");
 	}
 	else if (joystick_ang<0)
 	{
 		if(joystick_ang>(-1)*vel_ang_min)
 		{
 			vel.angular.z=vel_ang_min;
-			//ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
+			ROS_INFO("joystick_ang<0 && (joystick_ang>(-1)*vel_ang_min)");
 		}
 		if(joystick_ang<(-1)*vel_ang_min)
 		{
 			vel.angular.z=vel_ang_max*(joystick_ang/2);
-			//ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
+			ROS_INFO("joystick_ang<0 && (joystick_ang<(-1)*vel_ang_min)");
 		}
 	}
 
