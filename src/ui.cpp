@@ -365,8 +365,8 @@ void telepresenceFrame::sendGoalLeft(wxTimerEvent& evt)
 	vel.angular.z = 0.5; // rad/s
 	vel_pub.publish(vel);
 }
-//FIXME: The UI freezes while it's waiting for the movebase server to 
-//come up
+//FIXME: If move_base_server is not activated,
+// the UI freezes when trying to navigate because it gets stuck waiting for the server to come up
 void telepresenceFrame::waitForMoveBaseServer()
 {
 		while(!ac->waitForServer(ros::Duration(3.0))){

@@ -18,6 +18,10 @@ Used tools:
 
 How to compile and run the application
 --------------------------------------
+First of all, configure ROS for multiple machines by following the next tutorials:
+http://www.ros.org/wiki/ROS/NetworkSetup
+http://www.ros.org/wiki/ROS/Tutorials/MultipleMachines
+It is important to change the $ROS_MASTER_URI variable and that both machines can resolve the name of the other (check /etc/hosts file).
 
 on the robot:
   1) enable navigation mode, depends on the robot
@@ -67,6 +71,8 @@ has some working demos for the kinects 4 mics, but a ROS node for it is missing.
 The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack
 
 When exiting the application on the client, only the tekniker_telepresence node is finished, the audio_capture and ps3joy nodes have to be terminated with ctrl-c
+
+If move_base_server of the navigation system is not activated, the application freezes when trying to navigate because it gets stuck waiting for the server to come up
 
 
 Future work
