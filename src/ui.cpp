@@ -36,6 +36,7 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	m_pCameraView2 = new CCamView( this, wxPoint(0,0), wxSize(400, 300));
 	ac = new MoveBaseClient("move_base", true);
 	wxInitAllImageHandlers();
+	//Fixme: change the absolute path of the controller icon loaded
 	m_bitmap = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("/opt/ros/diamondback/stacks/tekniker-ros-pkg/tekniker_telepresence/controller22.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
 	m_button56 = new wxButton( this, wxID_ANY, wxT("Forward"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_button56->SetToolTip( wxT("Hold pressed to go forward") );

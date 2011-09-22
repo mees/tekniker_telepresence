@@ -74,6 +74,10 @@ When exiting the application on the client, only the tekniker_telepresence node 
 
 If move_base_server of the navigation system is not activated, the application freezes when trying to navigate because it gets stuck waiting for the server to come up
 
+The path of the controller icon is an absolute path, so you want to change it (look for it at the beginning of ui.cpp)
+
+Sometimes PS3Joy return strange values for the left joystick (very high ore zeros).
+
 
 Future work
 -----------
