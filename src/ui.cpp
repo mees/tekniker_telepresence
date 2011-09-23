@@ -131,16 +131,52 @@ telepresenceFrame::telepresenceFrame( wxWindow* parent, wxWindowID id, const wxS
 	changed=false;
 	mx=0;
 	my=0;
-	linear_=1;
-	angular_=2;
-	safety_distance = 0;
 	it_=new image_transport::ImageTransport(nh_);
 	//read parameters from launcher file
-	nh_.param("axis_linear", linear_, linear_);
-	nh_.param("axis_angular", angular_, angular_);
-	nh_.param("scale_angular", a_scale_, a_scale_);
-	nh_.param("scale_linear", l_scale_, l_scale_);
-	ros::param::get("safety_distance", safety_distance);
+	if (ros::param::has("~axis_linear"))
+	{
+		ros::param::get("~axis_linear", linear_);
+	}
+	else
+	{
+		linear_=1;
+	}
+	
+	if(ros::param::has("~axis_angular"))
+	{
+		ros::param::get("~axis_angular", angular_);
+	}
+	else
+	{
+		angular_=0;
+	}
+	
+	if(ros::param::has("~scale_angular"))
+	{
+		ros::param::get("~scale_angular", a_scale_);
+	}
+	else
+	{
+		a_scale_=2;
+	}
+	
+	if(ros::param::has("~scale_linear"))
+	{
+		ros::param::get("~scale_linear", l_scale_);
+	}
+	else
+	{
+		l_scale_=2;
+	}
+	
+	if(ros::param::has("~safety_distance"))
+	{
+		ros::param::get("~safety_distance", safety_distance);
+	}
+	else
+	{
+		safety_distance=0.5;
+	}
 	image_pub_ = it_->advertise("/mywebcam", 1);
 	image_color = it_->subscribe("/camera/rgb/image_color", 1, &telepresenceFrame::imageColor_callback, this);
 	status = nh_.subscribe("segway_status", 1, &telepresenceFrame::status_callback, this);

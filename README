@@ -76,8 +76,6 @@ If move_base_server of the navigation system is not activated, the application f
 
 The path of the controller icon is an absolute path, so you want to change it (look for it at the beginning of ui.cpp)
 
-Sometimes PS3Joy return strange values for the left joystick (very high ore zeros).
-
 
 Future work
 -----------
