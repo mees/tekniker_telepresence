@@ -46,9 +46,14 @@ on the client machine:
   1) enable ps3 controller, see http://www.ros.org/wiki/ps3joy/Tutorials/PairingJoystickAndBluetoothDongle
      $ sudo bash
      $ rosrun ps3joy ps3joy.py
-     if it doesn't activate, try the methods at http://www.ros.org/wiki/ps3joy/KarmicInstructions
+     press the pairing button. If it doesn't activate, try the methods at http://www.ros.org/wiki/ps3joy/KarmicInstructions
+     After pairing the controller, you have to press the button with the rectangle to activate joystick teleoperation and
+     press it again to disable it. Then you can enable gyro teleoperation by pressing the button with the triangle.
+     Remember always, that the robot can't be navigating to a goal or have the "navigation on" checkbox enabled in order
+     to activate the teleoperation via controller mode. This has been decided for safety purposes. 
+     So if you think that pressing the buttons on the controller doesn't work, first check the aforementioned condition.
      
-   2)compile and run the actual program with the launcher file
+   2) compile and run the actual program with the launcher file
      $ rosmake tekniker_telepresence
      $ roslaunch tekniker_telepresence tekniker_telepresence.launch 
 
