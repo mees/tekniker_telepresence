@@ -1,4 +1,5 @@
 The aim of this project is to develop a telepresence and teleoperation application in the robotic field using open source software
+This application has been done by Oier Mees during a summer internship at Tekniker Research Center and is now maintained by Ane Fernandez <ane_fernandez@hotmail.com>
 
 Used tools:
   Hardware
@@ -45,8 +46,8 @@ on the client machine:
   1) enable ps3 controller, see http://www.ros.org/wiki/ps3joy/Tutorials/PairingJoystickAndBluetoothDongle
      $ sudo bash
      $ rosrun ps3joy ps3joy.py
-     if it doesn't activate, try the last method described in http://www.ros.org/wiki/ps3joy/KarmicInstructions
-     which is to edit /lib/udev/rules.d/97-bluetooth.rules to disable loading of bluetoothd
+     if it doesn't activate, try the methods at http://www.ros.org/wiki/ps3joy/KarmicInstructions
+     
    2)compile and run the actual program with the launcher file
      $ rosmake tekniker_telepresence
      $ roslaunch tekniker_telepresence tekniker_telepresence.launch 
@@ -70,7 +71,8 @@ Streaming kinect audio over ROS doesn't work currently. Libfreenect unstable bra
 has some working demos for the kinects 4 mics, but a ROS node for it is missing.
 The easyest way to bypass this hurdle is to add a external mic and use the audio_capture stack
 
-When exiting the application on the client, only the tekniker_telepresence node is finished, the audio_capture and ps3joy nodes have to be terminated with ctrl-c
+When exiting the application on the client, only the tekniker_telepresence node is finished, the audio_capture and ps3joy nodes have to be terminated with ctrl-c.
+Since they are independent nodes, the behaviour is correct, but it would be nice to sync the exiting.
 
 If move_base_server of the navigation system is not activated, the application freezes when trying to navigate because it gets stuck waiting for the server to come up
 
@@ -89,6 +91,10 @@ Give some kind of feedback of the nearest obstacles distance in order to help na
 Show video and audio stream quality and feedback on the UI like in skype videoconferences
 
 Migrate from wxWidgets to Qt
+
+Because of acumulated errors during the navigation, the  estimation of the (robots) localization could differ from reality. Added this to the uncertainty of the kinects depth sensor, 
+it can happen that the robot thinks that the clicked (x,y) destination is unreachable. In the tests, it sometime happened that if the clicked destination (a person) was near wall, the robot couldn't reach the destination because it calculated that the person was inside the wall due to the acumulated errors. An option could be to analyze the surrounding points of (x,y) in a map from map_server and determine if the point is really unreachable. If yes, a nearby destination could be chosen instead
+
 
 
    
